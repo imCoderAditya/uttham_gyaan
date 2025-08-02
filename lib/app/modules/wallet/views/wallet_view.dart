@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
+import 'package:uttham_gyaan/app/data/model/wallet/wallet_model.dart';
+import 'package:uttham_gyaan/components/app_drawer.dart';
 
 import '../controllers/wallet_controller.dart';
 
@@ -14,36 +16,46 @@ class WalletView extends GetView<WalletController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // This is a placeholder for your GetX controller's data model.
-    // In a real app, you would use an Obx to react to changes.
-    final dashboardData = {
-      "FullName": "Ravi Kumar",
-      "TotalPayments": 19,
-      "TotalSpent": 4600.00,
-      "CoursesEnrolled": 6,
-      "TotalReferrals": 0,
-      "ConvertedReferrals": 0,
-      "TotalCommissionEarned": 0.00,
-      "PendingCommission": 1400.00,
-      "RejectedCommission": 0.00,
-    };
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: _buildAppBar(context),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildGreeting(context, dashboardData["FullName"] as String),
-            SizedBox(height: 24.h),
-            _buildMetricsGrid(context, dashboardData),
-            SizedBox(height: 24.h),
-            _buildReferralCard(context, dashboardData),
-          ],
-        ),
-      ),
+    // final dashboardData = {
+    //   "FullName": "Ravi Kumar",
+    //   "TotalPayments": 19,
+    //   "TotalSpent": 4600.00,
+    //   "CoursesEnrolled": 6,
+    //   "TotalReferrals": 0,
+    //   "ConvertedReferrals": 0,
+    //   "TotalCommissionEarned": 0.00,
+    //   "PendingCommission": 1400.00,
+    //   "RejectedCommission": 0.00,
+    // };
+
+    return GetBuilder(
+      init: WalletController(),
+      builder: (controller) {
+        return Scaffold(
+          drawer: AppDrawer(),
+          backgroundColor: theme.scaffoldBackgroundColor,
+          appBar: _buildAppBar(context),
+          body: Obx(() {
+            final dashboardData = controller.walletModel.value?.data;
+            return controller.walletModel.value == null
+                ? Center(child: CircularProgressIndicator())
+                : SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildGreeting(context, dashboardData?.fullName ?? ""),
+                      SizedBox(height: 24.h),
+                      _buildMetricsGrid(context, dashboardData),
+                      SizedBox(height: 24.h),
+                      _buildReferralCard(context, dashboardData),
+                    ],
+                  ),
+                );
+          }),
+        );
+      },
     );
   }
 
@@ -68,7 +80,7 @@ class WalletView extends GetView<WalletController> {
     return Text('hello'.trParams({'name': name}), style: AppTextStyles.headlineMedium());
   }
 
-  Widget _buildMetricsGrid(BuildContext context, Map<String, dynamic> data) {
+  Widget _buildMetricsGrid(BuildContext context, WalletData? data) {
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -77,15 +89,15 @@ class WalletView extends GetView<WalletController> {
       mainAxisSpacing: 12.h,
       childAspectRatio: 1.5,
       children: [
-        _buildMetricCard(context, 'total_spent'.tr, '₹${data["TotalSpent"].toStringAsFixed(2)}'),
+        _buildMetricCard(context, 'total_spent'.tr, '₹${data?.totalSpent?.toStringAsFixed(2)}'),
         _buildMetricCard(
           context,
           'pending_commission'.tr,
-          '₹${data["PendingCommission"].toStringAsFixed(2)}',
+          '₹${data?.totalCommissionEarned?.toStringAsFixed(2)}',
           AppColors.sucessPrimary,
         ),
-        _buildMetricCard(context, 'total_payments'.tr, data["TotalPayments"].toString()),
-        _buildMetricCard(context, 'courses_enrolled'.tr, data["CoursesEnrolled"].toString()),
+        _buildMetricCard(context, 'total_payments'.tr, data?.totalPayments.toString() ?? ""),
+        _buildMetricCard(context, 'courses_enrolled'.tr, data?.coursesEnrolled?.toString() ?? ""),
       ],
     );
   }
@@ -120,7 +132,7 @@ class WalletView extends GetView<WalletController> {
     );
   }
 
-  Widget _buildReferralCard(BuildContext context, Map<String, dynamic> data) {
+  Widget _buildReferralCard(BuildContext context, WalletData? data) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
@@ -146,12 +158,12 @@ class WalletView extends GetView<WalletController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildReferralStat(context, 'total_referrals'.tr, data["TotalReferrals"].toString()),
-              _buildReferralStat(context, 'converted'.tr, data["ConvertedReferrals"].toString()),
+              _buildReferralStat(context, 'total_referrals'.tr, data?.totalReferrals?.toString() ?? ""),
+              _buildReferralStat(context, 'converted'.tr, data?.convertedReferrals.toString() ?? ""),
               _buildReferralStat(
                 context,
                 'commission_earned'.tr,
-                '₹${data["TotalCommissionEarned"].toStringAsFixed(2)}',
+                '₹${data?.totalCommissionEarned?.toStringAsFixed(2)}',
               ),
             ],
           ),

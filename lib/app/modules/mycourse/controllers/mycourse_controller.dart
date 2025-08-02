@@ -82,8 +82,7 @@ class MycourseController extends GetxController {
   // }
 
   void clearSearch() {
-    // searchController.clear();
-    // filteredCourses.clear();
+    searchController.clear();
   }
 
   Future<void> fetchMyCourses() async {

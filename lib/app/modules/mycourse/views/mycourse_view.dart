@@ -87,16 +87,6 @@ class MycourseView extends GetView<MycourseController> {
         ),
       ),
       title: Text('my_courses'.tr, style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white)),
-      actions: [
-        Container(
-          margin: EdgeInsets.only(right: 16.w, bottom: 5.h),
-          decoration: BoxDecoration(color: AppColors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(12.r)),
-          child: IconButton(
-            icon: Icon(Icons.refresh_rounded, color: AppColors.white, size: 24.sp),
-            onPressed: () => controller.fetchMyCourses(),
-          ),
-        ),
-      ],
     );
   }
 

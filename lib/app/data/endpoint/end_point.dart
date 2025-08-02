@@ -10,4 +10,6 @@ class EndPoint {
   static const myCourse = "$baseurl/Course/GetPurchasedCourses";
 
   static const myCourseVideos = "$baseurl/CourseVideos/getvideowithprogress";
+
+  static const orderDashBoard = "$baseurl/payments/orderdashboard";
 }

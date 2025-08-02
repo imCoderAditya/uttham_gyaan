@@ -36,5 +36,16 @@
   "emptyData": "---------------Empty Data-----------------",
   "no_results_found": "कोई परिणाम नहीं मिला",
   "try_different_search": "कृपया कोई अन्य शब्द खोजें या वर्तनी की जाँच करें।",
-  "back_to_home": "होम पर वापस जाएं"
+  "wallet": "-----------------wallet---------------",
+  "back_to_home": "होम पर वापस जाएं",
+  "my_wallet": "मेरा वॉलेट",
+  "total_spent": "कुल खर्च",
+  "pending_commission": "लंबित कमीशन",
+  "total_payments": "कुल भुगतान",
+  "courses_enrolled": "नामांकित कोर्स",
+  "referral_stats": "रेफरल आँकड़े",
+  "total_referrals": "कुल रेफरल",
+  "converted": "परिवर्तित",
+  "commission_earned": "कमीशन अर्जित",
+  "no_data_available": "कोई डेटा उपलब्ध नहीं है।"
 }

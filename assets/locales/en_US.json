@@ -36,5 +36,16 @@
   "emptyData": "---------------Empty Data-----------------",
   "no_results_found": "No results found",
   "try_different_search": "Try a different search term or check your spelling.",
-  "back_to_home": "Back to Home"
+  "back_to_home": "Back to Home",
+  "my_wallet": "My Wallet",
+  "wallet": "--------------Wallet---------------",
+  "total_spent": "Total Spent",
+  "pending_commission": "Pending Commission",
+  "total_payments": "Total Payments",
+  "courses_enrolled": "Courses Enrolled",
+  "referral_stats": "Referral Stats",
+  "total_referrals": "Total Referrals",
+  "converted": "Converted",
+  "commission_earned": "Commission Earned",
+  "no_data_available": "No data available."
 }
