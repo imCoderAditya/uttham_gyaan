@@ -1,16 +1,14 @@
-import 'package:dio/dio.dart';
+// ignore_for_file: unused_field, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:uttham_gyaan/app/data/baseclient/base_client.dart';
 import 'package:uttham_gyaan/app/data/endpoint/end_point.dart';
 
 import '../../../core/config/theme/app_colors.dart';
 import '../../../services/storage/local_storage_service.dart';
-import '../../../services/storage/storage_keys.dart';
-import '../views/register_view.dart';
 import '../views/weview_payment.dart';
-
-
 
 class RegisterController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -21,11 +19,6 @@ class RegisterController extends GetxController {
   final referralPersonIdController = TextEditingController();
   final languagePreference = 'English'.obs;
   final isLoading = false.obs;
-
-  final Dio _dio = Dio(BaseOptions(
-    baseUrl: 'https://uttamgyanapi.veteransoftwares.com',
-    headers: {'Content-Type': 'application/json'},
-  ));
 
   final _storage = GetStorage();
 
@@ -45,15 +38,13 @@ class RegisterController extends GetxController {
     super.onClose();
   }
 
-
-
   Future<void> register() async {
     if (!formKey.currentState!.validate()) return;
 
     isLoading.value = true;
     try {
-      final response = await _dio.post(
-        EndPoint.Register,
+      final response = await BaseClient.post(
+        api: EndPoint.Register,
         data: {
           'FullName': fullNameController.text,
           'Email': emailController.text,
@@ -72,7 +63,7 @@ class RegisterController extends GetxController {
           backgroundColor: AppColors.sucessPrimary.withOpacity(0.1),
           colorText: AppColors.sucessPrimary,
         );
-        Get.to(() => WebViewScreen(url: response.data['redirectUrl'],uid :response.data['userId'].toString()));
+        Get.to(() => WebViewScreen(url: response.data['redirectUrl'], uid: response.data['userId'].toString()));
       } else {
         Get.snackbar(
           'Error',

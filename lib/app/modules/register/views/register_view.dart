@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
 import 'package:uttham_gyaan/app/modules/register/controllers/register_controller.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class RegisterView extends GetView<RegisterController> {
   const RegisterView({super.key});

@@ -1,10 +1,11 @@
-import 'package:dio/dio.dart';
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
+import 'package:uttham_gyaan/app/data/baseclient/base_client.dart';
 import 'package:uttham_gyaan/app/data/endpoint/end_point.dart';
-import 'package:uttham_gyaan/app/modules/register/controllers/register_controller.dart';
 
 import '../../../services/storage/local_storage_service.dart';
 
@@ -13,13 +14,6 @@ class LoginController extends GetxController {
   final identifierController = TextEditingController();
   final passwordController = TextEditingController();
   final isLoading = false.obs;
-
-  final Dio _dio = Dio(BaseOptions(
-    baseUrl: 'https://localhost:44352',
-    headers: {'Content-Type': 'application/json'},
-  ));
-
-  final _storage = GetStorage();
 
   @override
   void onInit() {
@@ -39,12 +33,9 @@ class LoginController extends GetxController {
 
     isLoading.value = true;
     try {
-      final response = await _dio.post(
-        EndPoint.Login,
-        data: {
-          'Identifier': identifierController.text,
-          'PasswordHash': passwordController.text,
-        },
+      final response = await BaseClient.post(
+        api: EndPoint.Login,
+        data: {'Identifier': identifierController.text, 'PasswordHash': passwordController.text},
       );
 
       if (response.data['status'] == true) {
@@ -74,5 +65,12 @@ class LoginController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  @override
+  void dispose() {
+    identifierController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 }
