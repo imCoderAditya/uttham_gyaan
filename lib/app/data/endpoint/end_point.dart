@@ -8,4 +8,6 @@ class EndPoint {
   static const allCourseVideo = "$baseurl/Course/SearchCourseVideos";
 
   static const myCourse = "$baseurl/Course/GetPurchasedCourses";
+  static const Register = "$baseurl/Registrationnew/Register";
+  static const Login = "$baseurl/UserLogin/loginuser";
 }
