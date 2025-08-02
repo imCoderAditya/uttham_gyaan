@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
 import 'package:uttham_gyaan/app/data/model/course/my_course_model.dart';
+import 'package:uttham_gyaan/app/modules/mycourse/views/my_video_view.dart';
+import 'package:uttham_gyaan/components/app_drawer.dart';
 
 import '../controllers/mycourse_controller.dart';
 
@@ -15,64 +17,55 @@ class MycourseView extends GetView<MycourseController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
+    Get.put(MycourseController(), permanent: true);
     return GetBuilder<MycourseController>(
       init: MycourseController(),
       builder: (controller) {
         return Obx(() {
-          final courses =
-              controller.filteredCourses.isNotEmpty
-                  ? controller.filteredCourses
-                  : controller.myCourseModel.value?.myCourseData ?? [];
-
+          final courses = controller.myCourseModel.value?.myCourseData ?? [];
           return Scaffold(
+            drawer: AppDrawer(),
             backgroundColor: theme.scaffoldBackgroundColor,
             appBar: _buildAppBar(context, controller),
-            body: RefreshIndicator(
-              onRefresh: () => controller.fetchMyCourses(),
-              color: colorScheme.primary,
-              backgroundColor: colorScheme.surface,
-              child: CustomScrollView(
-                slivers: [
-                  // Search Bar
-                  SliverToBoxAdapter(child: _buildSearchBar(context, controller)),
+            body: Column(
+              children: [
+                _buildSearchBar(context, controller),
+                _buildSectionHeader(context, 'my_courses'.tr, controller.myCourseModel.value?.total ?? 0),
 
-                  // Courses Section
-                  if (courses.isNotEmpty) ...[
-                    SliverToBoxAdapter(
-                      child: _buildSectionHeader(context, 'my_courses'.tr, controller.myCourseModel.value?.total ?? 0),
-                    ),
-
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      sliver: SliverGrid(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.75,
-                          crossAxisSpacing: 12.w,
-                          mainAxisSpacing: 12.h,
-                        ),
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) => GestureDetector(
-                            onTap: () {
-                              // Convert MyCourseData to CourseData for navigation
-                              // You might need to create a conversion method or use a common interface
-                              // Get.to(CourseDetailsView(courseData: courses[index]));
-                            },
-                            child: _buildCourseCard(context, courses[index]),
+                Expanded(
+                  child: Obx(() {
+                    if (controller.isLoading.value && courses.isEmpty) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (!controller.isLoading.value && courses.isEmpty) {
+                      return _buildEmptyState(context, controller.searchController.text.isNotEmpty);
+                    } else {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: GridView.builder(
+                          padding: EdgeInsets.only(bottom: 100.h),
+                          shrinkWrap: true,
+                          physics: AlwaysScrollableScrollPhysics(),
+                          itemCount: courses.length,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.75,
+                            crossAxisSpacing: 12.w,
+                            mainAxisSpacing: 12.h,
                           ),
-                          childCount: courses.length,
+                          itemBuilder:
+                              (context, index) => GestureDetector(
+                                onTap: () {
+                                  controller.fetchAllCourseVideo(courses[index].courseId);
+                                  Get.to(MyVideoView());
+                                },
+                                child: _buildCourseCard(context, courses[index]),
+                              ),
                         ),
-                      ),
-                    ),
-                  ] else
-                    SliverToBoxAdapter(child: _buildEmptyState(context, controller.searchController.text.isNotEmpty)),
-
-                  // Bottom Spacing
-                  SliverToBoxAdapter(child: SizedBox(height: 100.h)),
-                ],
-              ),
+                      );
+                    }
+                  }),
+                ),
+              ],
             ),
           );
         });
@@ -126,7 +119,9 @@ class MycourseView extends GetView<MycourseController> {
       ),
       child: TextField(
         controller: controller.searchController,
-        onChanged: controller.searchCourses,
+        onChanged: (value) {
+          controller.fetchStudentCourse(query: value);
+        },
         decoration: InputDecoration(
           hintText: 'search_courses'.tr,
           hintStyle: AppTextStyles.body().copyWith(color: AppTextStyles.caption().color),

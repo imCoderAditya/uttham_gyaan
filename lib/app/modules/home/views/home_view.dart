@@ -7,6 +7,7 @@ import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
 import 'package:uttham_gyaan/app/data/model/course/course_model.dart';
 import 'package:uttham_gyaan/app/modules/courseDetails/views/course_details_view.dart';
+import 'package:uttham_gyaan/app/modules/home/components/shimmer_effect_view.dart';
 import 'package:uttham_gyaan/app/modules/home/controllers/home_controller.dart';
 import 'package:uttham_gyaan/app/modules/home/views/search_view.dart';
 import 'package:uttham_gyaan/components/app_drawer.dart';
@@ -25,65 +26,67 @@ class HomeView extends StatelessWidget {
       builder: (controller) {
         return Obx(() {
           final courses = controller.courseModel.value?.courseData ?? [];
-          return Scaffold(
-            backgroundColor: theme.scaffoldBackgroundColor,
-            appBar: _buildAppBar(context, controller),
-            drawer: AppDrawer(),
-            body: RefreshIndicator(
-              onRefresh: () => controller.fetchAllCourse(),
-              color: colorScheme.primary,
-              backgroundColor: colorScheme.surface,
-              child: CustomScrollView(
-                slivers: [
-                  // Language Toggle Section
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 16.h),
-                      child: ImageCarouselSlider(
-                        imageUrls: controller.sliderImage,
-                        height: 210,
-                        onChange: (value) {
-                          debugPrint("Response : ${value.id}");
-                        },
-                        autoPlay: true,
-                        indicatorStyle: IndicatorStyle.line,
-                      ),
-                    ),
-                  ),
-
-                  // Courses Section
-                  if (courses.isNotEmpty) ...[
-                    SliverToBoxAdapter(child: _buildSectionHeader(context, 'courses'.tr)),
-
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      sliver: SliverGrid(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.75,
-                          crossAxisSpacing: 12.w,
-                          mainAxisSpacing: 12.h,
-                        ),
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) => GestureDetector(
-                            onTap: () {
-                              Get.to(CourseDetailsView(courseData: courses[index]));
+          return courses.isEmpty
+              ? ShimmerHomeView()
+              : Scaffold(
+                backgroundColor: theme.scaffoldBackgroundColor,
+                appBar: _buildAppBar(context, controller),
+                drawer: AppDrawer(),
+                body: RefreshIndicator(
+                  onRefresh: () => controller.fetchAllCourse(),
+                  color: colorScheme.primary,
+                  backgroundColor: colorScheme.surface,
+                  child: CustomScrollView(
+                    slivers: [
+                      // Language Toggle Section
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 16.h),
+                          child: ImageCarouselSlider(
+                            imageUrls: controller.sliderImage,
+                            height: 210,
+                            onChange: (value) {
+                              debugPrint("Response : ${value.id}");
                             },
-                            child: _buildCourseCard(context, courses[index]),
+                            autoPlay: true,
+                            indicatorStyle: IndicatorStyle.line,
                           ),
-                          childCount: courses.length,
                         ),
                       ),
-                    ),
-                  ] else
-                    SliverToBoxAdapter(child: _buildEmptyState(context)),
 
-                  // Bottom Spacing
-                  SliverToBoxAdapter(child: SizedBox(height: 100.h)),
-                ],
-              ),
-            ),
-          );
+                      // Courses Section
+                      if (courses.isNotEmpty) ...[
+                        SliverToBoxAdapter(child: _buildSectionHeader(context, 'courses'.tr)),
+
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          sliver: SliverGrid(
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.75,
+                              crossAxisSpacing: 12.w,
+                              mainAxisSpacing: 12.h,
+                            ),
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) => GestureDetector(
+                                onTap: () {
+                                  Get.to(CourseDetailsView(courseData: courses[index]));
+                                },
+                                child: _buildCourseCard(context, courses[index]),
+                              ),
+                              childCount: courses.length,
+                            ),
+                          ),
+                        ),
+                      ] else
+                        SliverToBoxAdapter(child: _buildEmptyState(context)),
+
+                      // Bottom Spacing
+                      SliverToBoxAdapter(child: SizedBox(height: 100.h)),
+                    ],
+                  ),
+                ),
+              );
         });
       },
     );

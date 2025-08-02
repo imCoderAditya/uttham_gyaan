@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uttham_gyaan/app/modules/home/views/home_view.dart';
 import 'package:uttham_gyaan/app/modules/mycourse/views/mycourse_view.dart';
+import 'package:uttham_gyaan/app/modules/profile/views/profile_view.dart';
+import 'package:uttham_gyaan/app/modules/wallet/views/wallet_view.dart';
 
 class NavController extends GetxController {
   var currentIndex = 0.obs;
@@ -10,5 +11,5 @@ class NavController extends GetxController {
     currentIndex.value = index;
   }
 
-  final page = [HomeView(), MycourseView(), HomeView(), Scaffold()];
+  final page = [HomeView(), MycourseView(), WalletView(), ProfileView()];
 }
