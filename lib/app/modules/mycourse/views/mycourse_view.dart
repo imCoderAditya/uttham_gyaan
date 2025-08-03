@@ -338,14 +338,18 @@ class MycourseView extends GetView<MycourseController> {
     final colorScheme = theme.colorScheme;
 
     return Container(
-      margin: EdgeInsets.all(32.w),
-      padding: EdgeInsets.all(40.w),
+      width: double.infinity,
+
+      margin: EdgeInsets.symmetric(horizontal: 16.h),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(20.r),
         border: Border.all(color: theme.dividerColor, width: 1),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             isSearching ? Icons.search_off_rounded : Icons.school_outlined,

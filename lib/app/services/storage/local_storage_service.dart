@@ -1,4 +1,6 @@
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:uttham_gyaan/app/routes/app_pages.dart';
 import 'package:uttham_gyaan/app/services/storage/storage_keys.dart';
 
 class LocalStorageService {
@@ -31,21 +33,15 @@ class LocalStorageService {
   static bool isLoggedIn() => read<bool>(StorageKeys.isLoggedIn) ?? false;
 
   static String? getUserId() => read<String>(StorageKeys.userId);
-  static String? getPatientId() => read<String>(StorageKeys.userPatientId);
 
   static Future<void> saveLogin({required String userId}) async {
     await write(StorageKeys.userId, userId);
     await write(StorageKeys.isLoggedIn, true);
   }
 
-  static Future<void> savePatientLogin({required String patientId}) async {
-    await write(StorageKeys.userPatientId, patientId);
-    await write(StorageKeys.isLoggedIn, true);
-  }
-
   static Future<void> logout() async {
     await remove(StorageKeys.userId);
     await write(StorageKeys.isLoggedIn, false);
-    // Get.offAllNamed(Routes.LOGIN);
+    Get.offAllNamed(Routes.LOGIN);
   }
 }

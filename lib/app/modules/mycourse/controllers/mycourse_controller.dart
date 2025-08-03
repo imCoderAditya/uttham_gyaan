@@ -30,7 +30,8 @@ class MycourseController extends GetxController {
     } catch (e) {
       LoggerUtils.error("Error $e");
     } finally {
-      isLoading.value = true;
+      await Future.delayed(Duration(milliseconds: 100));
+      isLoading.value = false;
       update();
     }
   }

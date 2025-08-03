@@ -323,41 +323,40 @@ class MyVideoView extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Center(
-      child: Container(
-        margin: EdgeInsets.all(32.w),
-        padding: EdgeInsets.all(40.w),
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(color: theme.dividerColor, width: 1),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.video_library_outlined, size: 80.sp, color: AppTextStyles.caption().color),
-            SizedBox(height: 16.h),
-            Text('no_videos_available'.tr, style: AppTextStyles.headlineMedium()),
-            SizedBox(height: 8.h),
-            Text(
-              'videos_will_appear_here_when_available'.tr,
-              style: AppTextStyles.caption(),
-              textAlign: TextAlign.center,
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.all(32.w),
+      padding: EdgeInsets.all(40.w),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(20.r),
+        border: Border.all(color: theme.dividerColor, width: 1),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.video_library_outlined, size: 80.sp, color: AppTextStyles.caption().color),
+          SizedBox(height: 16.h),
+          Text('no_videos_available'.tr, style: AppTextStyles.headlineMedium()),
+          SizedBox(height: 8.h),
+          Text(
+            'videos_will_appear_here_when_available'.tr,
+            style: AppTextStyles.caption(),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 24.h),
+          ElevatedButton.icon(
+            onPressed: () => Get.back(),
+            icon: Icon(Icons.arrow_back_rounded, size: 20.sp),
+            label: Text('go_back'.tr),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: colorScheme.primary,
+              foregroundColor: AppColors.white,
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
             ),
-            SizedBox(height: 24.h),
-            ElevatedButton.icon(
-              onPressed: () => Get.back(),
-              icon: Icon(Icons.arrow_back_rounded, size: 20.sp),
-              label: Text('go_back'.tr),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: colorScheme.primary,
-                foregroundColor: AppColors.white,
-                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -8,7 +8,7 @@ import 'package:uttham_gyaan/app/data/endpoint/end_point.dart';
 import 'package:uttham_gyaan/app/data/model/video/video_details_model.dart';
 
 class VideoController extends GetxController {
-  RxBool isLoading = false.obs;
+RxBool isLoading = false.obs;
   Rxn<VideoDetailsModel> videoDetailsModel = Rxn<VideoDetailsModel>();
 
   Future<void> fetchVideo(int? videoId) async {
@@ -26,4 +26,13 @@ class VideoController extends GetxController {
       update();
     }
   }
+
+  //TODO: Implement VideoController
+
+  final count = 0.obs;
+
+
+
+  void increment() => count.value++;
+
 }

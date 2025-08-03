@@ -7,6 +7,7 @@ import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
 import 'package:uttham_gyaan/app/core/config/theme/theme_controller.dart';
 import 'package:uttham_gyaan/app/core/contants/constant.dart';
+import 'package:uttham_gyaan/app/services/storage/local_storage_service.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -388,10 +389,7 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  void _performLogout() {
-    // Implement your logout logic here
-    // Clear user data, tokens, etc.
-    // Navigate to login screen
-    // Get.offAllNamed('/login');
+  void _performLogout() async {
+    await LocalStorageService.logout();
   }
 }
