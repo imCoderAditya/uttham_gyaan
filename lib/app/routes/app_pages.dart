@@ -14,6 +14,8 @@ import '../modules/nav/bindings/nav_binding.dart';
 import '../modules/nav/views/nav_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
+import '../modules/quiz/bindings/quiz_binding.dart';
+import '../modules/quiz/views/quiz_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
@@ -44,5 +46,6 @@ class AppPages {
     GetPage(name: _Paths.WALLET, page: () => const WalletView(), binding: WalletBinding()),
     GetPage(name: _Paths.LANGUAGE, page: () => const LanguageView(), binding: LanguageBinding()),
     GetPage(name: _Paths.SPLASH, page: () => const SplashView(), binding: SplashBinding()),
+    GetPage(name: _Paths.QUIZ, page: () => const QuizView(), binding: QuizBinding()),
   ];
 }

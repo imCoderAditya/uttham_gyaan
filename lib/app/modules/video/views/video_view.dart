@@ -6,6 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
+import 'package:uttham_gyaan/app/data/model/quiz/quiz_result_model.dart';
+import 'package:uttham_gyaan/app/data/model/video/video_details_model.dart';
+import 'package:uttham_gyaan/app/modules/quiz/views/quiz_view.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../controllers/video_controller.dart';
@@ -19,6 +22,7 @@ class VideoView extends StatefulWidget {
 
 class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
   final VideoController _videoController = Get.find<VideoController>();
+
   late final YoutubePlayerController _playerController;
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
@@ -36,7 +40,10 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
     _initializeAnimations();
 
     // Get video ID from arguments
-    final videoId = Get.arguments?['videoId'] ?? 12;
+    final videoId = Get.arguments?['videoId'] ?? 0;
+    final courseId = Get.arguments?['courseId'] ?? 0;
+    debugPrint("CourseId $courseId\n videoId Id : $videoId");
+    _videoController.getQuizResult(courseId: courseId, videoId: videoId);
     _fetchVideoData(videoId);
   }
 
@@ -125,6 +132,11 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
     }
   }
 
+  double calculateProgressPercentage(Duration current, Duration total) {
+    if (total.inSeconds == 0) return 0; // avoid division by zero
+    return (current.inSeconds / total.inSeconds) * 100;
+  }
+
   @override
   void dispose() {
     _animationController.dispose();
@@ -134,7 +146,27 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
     }
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    timeUpdateVideo();
     super.dispose();
+  }
+
+  Future<void> timeUpdateVideo() async {
+    final videoData = _videoController.videoDetailsModel.value?.data;
+    double percentage = calculateProgressPercentage(_currentPosition, _totalDuration);
+    debugPrint("Progress: ${percentage.toStringAsFixed(2)}%");
+    final durato = _formatDuration(_currentPosition); // "02:35"
+    final parts = durato.split(':'); // ["02", "35"]
+    final currentTime = (int.parse(parts[0]) * 60) + int.parse(parts[1]);
+    debugPrint("===>${currentTime.toString()}");
+    if ((percentage) > (videoData?.progress?.completionPercentage ?? 0)) {
+      _videoController.updateProgressBar(
+        courseId: videoData?.video?.courseId,
+        videoId: videoData?.video?.videoId,
+        currentTime: currentTime,
+        completionPercentage: double.parse(percentage.toStringAsFixed(2)),
+        isCompleted: percentage >= 97.00,
+      );
+    }
   }
 
   @override
@@ -143,7 +175,6 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
     final orientation = MediaQuery.of(context).orientation;
-
     return Obx(() {
       _videoController.isLoading.value;
       if (_isLoading) {
@@ -347,12 +378,11 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildVideoContent(ThemeData theme, ColorScheme colorScheme, bool isDark, video, progress) {
+  Widget _buildVideoContent(ThemeData theme, ColorScheme colorScheme, bool isDark, Video video, progress) {
     return Container(
       margin: EdgeInsets.only(top: 1.h),
       decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+        color: colorScheme.surface, //borderRadius: BorderRadius.circular(0)
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -384,8 +414,30 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                 _buildVideoStats(video, colorScheme),
                 SizedBox(height: 32.h),
                 _buildActionButtons(colorScheme),
-                SizedBox(height: 40.h),
-                _buildAdditionalInfo(video, colorScheme),
+                progress.isCompleted == true ? SizedBox(height: 40.h) : SizedBox(),
+                (progress.isCompleted == true)
+                    ? (_videoController.isMatched.value == false)
+                        ? _buildAdditionalInfo(video, colorScheme) // quiz section
+                        : Padding(
+                          padding: const EdgeInsets.only(top: 30.0),
+                          child: MaterialButton(
+                            minWidth: double.infinity,
+                            onPressed: () {
+                              showQuizResultDialog(context, _videoController.quizResult.value);
+                            },
+                            color: AppColors.primaryColor,
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                            splashColor: Colors.white.withOpacity(0.2),
+                            child: Text(
+                              "retake_quiz".tr,
+                              style: AppTextStyles.body().copyWith(color: AppColors.white, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        )
+                    : const SizedBox.shrink(), // if course not completed → show nothing
+
                 SizedBox(height: 100.h),
               ],
             ),
@@ -614,10 +666,14 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
               _playerController.value.isPlaying ? _playerController.pause() : _playerController.play();
               setState(() => _showControls = true);
             },
-            icon: Icon(_playerController.value.isPlaying ? Icons.pause : Icons.play_arrow, size: 22.sp),
+            icon: Icon(
+              _playerController.value.isPlaying ? Icons.pause : Icons.play_arrow,
+              size: 22.sp,
+              color: AppColors.white,
+            ),
             label: Text(
               _playerController.value.isPlaying ? 'Pause' : 'Play',
-              style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700),
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primaryColor,
@@ -678,45 +734,36 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildAdditionalInfo(video, ColorScheme colorScheme) {
+  Widget _buildAdditionalInfo(Video video, ColorScheme colorScheme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'About This Video',
+          'Quiz Section',
           style: AppTextStyles.headlineMedium().copyWith(fontSize: 20.sp, fontWeight: FontWeight.w700),
         ),
         SizedBox(height: 16.h),
-        Container(
-          padding: EdgeInsets.all(16.w),
-          decoration: BoxDecoration(
-            color: colorScheme.surfaceVariant.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildInfoRow('Video ID', '${video.videoId}', colorScheme),
-              SizedBox(height: 12.h),
-              _buildInfoRow('Course ID', '${video.courseId}', colorScheme),
-              SizedBox(height: 12.h),
-              _buildInfoRow('Sequence', '${video.sequenceOrder}', colorScheme),
-            ],
+        InkWell(
+          onTap: () {
+            Get.to(QuizView(videoId: video.videoId));
+          },
+          borderRadius: BorderRadius.circular(10.r),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.h),
+            width: double.infinity,
+            alignment: Alignment.centerLeft,
+            height: 55.h,
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.accentColor),
+              borderRadius: BorderRadius.circular(10.r),
+              color: AppColors.accentColor.withValues(alpha: 0.2),
+            ),
+            child: Text(
+              "Start Quiz",
+              style: TextStyle(color: AppColors.black, fontSize: 18.sp, fontWeight: FontWeight.w600),
+            ),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value, ColorScheme colorScheme) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: AppTextStyles.body().copyWith(color: colorScheme.onSurface.withOpacity(0.7), fontSize: 14.sp),
-        ),
-        Text(value, style: AppTextStyles.body().copyWith(fontWeight: FontWeight.w600, fontSize: 14.sp)),
       ],
     );
   }
@@ -761,6 +808,74 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
       trailing: Icon(Icons.arrow_forward_ios, size: 16.sp),
       onTap: onTap,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+    );
+  }
+
+  void showQuizResultDialog(BuildContext context, QuizResult? quizResult) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Video Title
+                  Center(
+                    child: Text(
+                      quizResult?.videoTitle ?? "no_title".tr,
+                      style: AppTextStyles.headlineMedium().copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primaryColor,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Results
+                  _buildResultRow("attempted".tr, quizResult?.attempted?.toString() ?? "0"),
+                  _buildResultRow("correct".tr, quizResult?.correct?.toString() ?? "0"),
+                  _buildResultRow("accuracy".tr, "${quizResult?.accuracyPercentage?.toStringAsFixed(2) ?? "0"}%"),
+
+                  const SizedBox(height: 20),
+
+                  // Close button
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryColor,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      child: Text("ok".tr),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+    );
+  }
+
+  Widget _buildResultRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: AppTextStyles.body()),
+          Text(
+            value,
+            style: AppTextStyles.body().copyWith(fontWeight: FontWeight.bold, color: AppColors.sucessPrimary),
+          ),
+        ],
+      ),
     );
   }
 

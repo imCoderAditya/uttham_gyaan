@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
-
 import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
-
-
+import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
+import 'package:uttham_gyaan/app/modules/home/views/search_view.dart';
 import 'package:uttham_gyaan/components/app_drawer.dart';
 
 class ShimmerHomeView extends StatelessWidget {
@@ -71,13 +71,15 @@ class ShimmerHomeView extends StatelessWidget {
           ),
         ),
       ),
-      title: Container(width: 120.w, height: 24.h, color: Colors.white),
+      title: Text('Uttham Gyaan'.tr, style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white)),
       actions: [
         Container(
           margin: EdgeInsets.only(right: 16.w, bottom: 5.h),
-          width: 40.w,
-          height: 40.h,
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12.r)),
+          decoration: BoxDecoration(color: AppColors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(12.r)),
+          child: IconButton(
+            icon: Icon(Icons.search_rounded, color: AppColors.white, size: 24.sp),
+            onPressed: () => Get.to(SearchView(isDisableBackButton: true))?.then((value) {}),
+          ),
         ),
       ],
     );

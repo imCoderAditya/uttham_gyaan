@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
+import 'package:uttham_gyaan/app/core/contants/constant.dart';
 import 'package:uttham_gyaan/app/data/model/video/course_video_model.dart';
 import 'package:uttham_gyaan/app/modules/mycourse/controllers/mycourse_controller.dart';
 import 'package:uttham_gyaan/app/modules/video/controllers/video_controller.dart';
@@ -16,7 +17,6 @@ class MyVideoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return GetBuilder<MycourseController>(
       init: MycourseController(),
       builder: (controller) {
@@ -53,14 +53,14 @@ class MyVideoView extends StatelessWidget {
       ),
       title: Text('course_videos'.tr, style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white)),
       actions: [
-        Container(
-          margin: EdgeInsets.only(right: 16.w, bottom: 5.h),
-          decoration: BoxDecoration(color: AppColors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(12.r)),
-          child: IconButton(
-            icon: Icon(Icons.sort_rounded, color: AppColors.white, size: 24.sp),
-            onPressed: () => _showSortOptions(context, controller),
-          ),
-        ),
+        // Container(
+        //   margin: EdgeInsets.only(right: 16.w, bottom: 5.h),
+        //   decoration: BoxDecoration(color: AppColors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(12.r)),
+        //   child: IconButton(
+        //     icon: Icon(Icons.sort_rounded, color: AppColors.white, size: 24.sp),
+        //     onPressed: () => _showSortOptions(context, controller),
+        //   ),
+        // ),
       ],
     );
   }
@@ -77,6 +77,7 @@ class MyVideoView extends StatelessWidget {
           sliver: SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
               final video = videos[index];
+
               return _buildVideoCard(context, video, index, controller);
             }, childCount: videos.length),
           ),
@@ -143,7 +144,8 @@ class MyVideoView extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
-
+    final youtubeId = extractVideoId(video.videoUrl ?? "");
+    final thumbnailUrl = "https://img.youtube.com/vi/$youtubeId/hqdefault.jpg";
     return Container(
       margin: EdgeInsets.only(bottom: 16.h),
       decoration: BoxDecoration(
@@ -172,11 +174,13 @@ class MyVideoView extends StatelessWidget {
                     width: 80.w,
                     height: 80.w,
                     decoration: BoxDecoration(
+                      image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(thumbnailUrl)),
                       gradient: LinearGradient(
                         colors: [colorScheme.primary.withOpacity(0.8), colorScheme.secondary.withOpacity(0.8)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
+
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Stack(
@@ -237,7 +241,7 @@ class MyVideoView extends StatelessWidget {
                             Icon(Icons.video_library_rounded, size: 16.sp, color: AppTextStyles.small().color),
                             SizedBox(width: 4.w),
                             Text(
-                              'course_id'.trParams({'id': '${video.courseId ?? 0}'}),
+                              "${'course_id'.tr} ${video.courseId}",
                               style: AppTextStyles.small().copyWith(fontSize: 12.sp),
                             ),
                           ],
@@ -366,7 +370,7 @@ class MyVideoView extends StatelessWidget {
     // Implement video player navigation
     // Get.to(VideoPlayerView(video: video));
     videoController.fetchVideo(video.videoId);
-    Get.toNamed(Routes.VIDEO, arguments: {"videoId": video.videoId});
+    Get.toNamed(Routes.VIDEO, arguments: {"videoId": video.videoId, "courseId": video.courseId});
   }
 
   // void _downloadVideo(BuildContext context, CourseVideo video, MycourseController controller) {
@@ -440,47 +444,47 @@ class MyVideoView extends StatelessWidget {
   //   );
   // }
 
-  void _showSortOptions(BuildContext context, MycourseController controller) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+  // void _showSortOptions(BuildContext context, MycourseController controller) {
+  //   final theme = Theme.of(context);
+  //   final colorScheme = theme.colorScheme;
 
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder:
-          (context) => Container(
-            padding: EdgeInsets.all(20.w),
-            decoration: BoxDecoration(
-              color: colorScheme.surface,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 40.w,
-                  height: 4.h,
-                  decoration: BoxDecoration(color: theme.dividerColor, borderRadius: BorderRadius.circular(2.r)),
-                ),
-                SizedBox(height: 20.h),
-                Text('sort_videos'.tr, style: AppTextStyles.headlineMedium().copyWith(fontSize: 18.sp)),
-                SizedBox(height: 24.h),
-                // _buildBottomSheetOption(context, Icons.sort_by_alpha_rounded, 'sort_by_sequence'.tr, () {
-                //   Get.back();
-                //   controller.sortVideosBySequence();
-                // }),
-                // _buildBottomSheetOption(context, Icons.access_time_rounded, 'sort_by_duration'.tr, () {
-                //   Get.back();
-                //   controller.sortVideosByDuration();
-                // }),
-                // _buildBottomSheetOption(context, Icons.title_rounded, 'sort_by_title'.tr, () {
-                //   Get.back();
-                //   controller.sortVideosByTitle();
-                // }),
-                // SizedBox(height: 20.h),
-              ],
-            ),
-          ),
-    );
-  }
+  //   showModalBottomSheet(
+  //     context: context,
+  //     backgroundColor: Colors.transparent,
+  //     builder:
+  //         (context) => Container(
+  //           padding: EdgeInsets.all(20.w),
+  //           decoration: BoxDecoration(
+  //             color: colorScheme.surface,
+  //             borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+  //           ),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Container(
+  //                 width: 40.w,
+  //                 height: 4.h,
+  //                 decoration: BoxDecoration(color: theme.dividerColor, borderRadius: BorderRadius.circular(2.r)),
+  //               ),
+  //               SizedBox(height: 20.h),
+  //               Text('sort_videos'.tr, style: AppTextStyles.headlineMedium().copyWith(fontSize: 18.sp)),
+  //               SizedBox(height: 24.h),
+  //               // _buildBottomSheetOption(context, Icons.sort_by_alpha_rounded, 'sort_by_sequence'.tr, () {
+  //               //   Get.back();
+  //               //   controller.sortVideosBySequence();
+  //               // }),
+  //               // _buildBottomSheetOption(context, Icons.access_time_rounded, 'sort_by_duration'.tr, () {
+  //               //   Get.back();
+  //               //   controller.sortVideosByDuration();
+  //               // }),
+  //               // _buildBottomSheetOption(context, Icons.title_rounded, 'sort_by_title'.tr, () {
+  //               //   Get.back();
+  //               //   controller.sortVideosByTitle();
+  //               // }),
+  //               // SizedBox(height: 20.h),
+  //             ],
+  //           ),
+  //         ),
+  //   );
+  // }
 }

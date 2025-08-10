@@ -18,6 +18,7 @@ class WalletView extends GetView<WalletController> {
     final theme = Theme.of(context);
 
     return GetBuilder(
+      autoRemove: false,
       init: WalletController(),
       builder: (controller) {
         return Scaffold(
@@ -146,7 +147,7 @@ class WalletView extends GetView<WalletController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'overview'.tr,
+          'overView'.tr,
           style: AppTextStyles.headlineMedium().copyWith(fontSize: 20.sp, fontWeight: FontWeight.w600),
         ),
         SizedBox(height: 16.h),

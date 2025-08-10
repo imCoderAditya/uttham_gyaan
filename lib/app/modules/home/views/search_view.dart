@@ -7,6 +7,7 @@ import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
 import 'package:uttham_gyaan/app/core/config/theme/theme_controller.dart';
 import 'package:uttham_gyaan/app/data/model/course/course_model.dart';
+import 'package:uttham_gyaan/app/modules/courseDetails/views/course_details_view.dart';
 import 'package:uttham_gyaan/app/modules/home/controllers/home_controller.dart';
 import 'package:uttham_gyaan/components/app_drawer.dart';
 
@@ -197,14 +198,7 @@ class SearchView extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Handle course tap
-        Get.snackbar(
-          'course_selected'.tr,
-          course.title ?? 'unknown_course'.tr,
-          backgroundColor: colorScheme.primary,
-          colorText: AppColors.white,
-          borderRadius: 12.r,
-          margin: EdgeInsets.all(16.w),
-        );
+        Get.to(CourseDetailsView(courseData: course));
       },
       child: Container(
         decoration: BoxDecoration(

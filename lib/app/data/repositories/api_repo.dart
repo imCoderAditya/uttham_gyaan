@@ -1,6 +1,7 @@
 import 'package:uttham_gyaan/app/core/utils/logger_utils.dart';
 import 'package:uttham_gyaan/app/data/baseclient/base_client.dart';
 import 'package:uttham_gyaan/app/data/endpoint/end_point.dart';
+import 'package:uttham_gyaan/app/services/storage/local_storage_service.dart';
 
 abstract class APIRepoRistory {
   Future<dynamic> fetchAllCourse();
@@ -9,6 +10,7 @@ abstract class APIRepoRistory {
 }
 
 class APIRepo extends APIRepoRistory {
+  final userId = LocalStorageService.getUserId();
   @override
   Future fetchAllCourse({String? query, int? courseId}) async {
     try {
@@ -30,7 +32,7 @@ class APIRepo extends APIRepoRistory {
     try {
       final res = await BaseClient.post(
         api: EndPoint.allCourseVideo,
-        data: {"CourseID": 1, "search": "", "Language": "English"},
+        data: {"CourseID": courseId, "search": query, "Language": "English"},
       );
 
       if (res != null && res.statusCode == 200) {

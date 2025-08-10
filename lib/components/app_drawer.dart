@@ -7,6 +7,7 @@ import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
 import 'package:uttham_gyaan/app/core/config/theme/theme_controller.dart';
 import 'package:uttham_gyaan/app/core/contants/constant.dart';
+import 'package:uttham_gyaan/app/modules/profile/controllers/profile_controller.dart';
 import 'package:uttham_gyaan/app/services/storage/local_storage_service.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -19,6 +20,9 @@ class AppDrawer extends StatelessWidget {
 
     return Drawer(
       backgroundColor: colorScheme.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(10.r), topRight: Radius.circular(20.r)),
+      ),
       width: 280.w,
       child: Column(
         children: [
@@ -113,54 +117,59 @@ class AppDrawer extends StatelessWidget {
   }
 
   Widget _buildDrawerHeader(BuildContext context) {
-    return Container(
-      height: 260.h,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: AppColors.headerGradientColors,
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(20.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Profile Image
-              Container(
-                width: 70.w,
-                height: 70.w,
-                decoration: BoxDecoration(
-                  color: AppColors.white.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(35.r),
-                  border: Border.all(color: AppColors.white.withOpacity(0.3), width: 2.w),
-                  boxShadow: [
-                    BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10.r, offset: Offset(0, 4.h)),
-                  ],
-                ),
-                child: Icon(Icons.person_rounded, size: 40.sp, color: AppColors.white),
-              ),
-              SizedBox(height: 12.h),
-
-              // User Name
-              Text(
-                'welcome_user'.tr,
-                style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white, fontSize: 20.sp),
-              ),
-              SizedBox(height: 4.h),
-
-              // User Email or Status
-              Text(
-                'explore_courses'.tr,
-                style: AppTextStyles.caption().copyWith(color: AppColors.white.withOpacity(0.85), fontSize: 14.sp),
-              ),
-            ],
+    final controller = Get.put(ProfileController());
+    return Builder(
+      builder: (context) {
+        return Container(
+          height: 260.h,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: AppColors.headerGradientColors,
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
-        ),
-      ),
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.all(20.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Profile Image
+                  Container(
+                    width: 70.w,
+                    height: 70.w,
+                    decoration: BoxDecoration(
+                      color: AppColors.white.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(35.r),
+                      border: Border.all(color: AppColors.white.withOpacity(0.3), width: 2.w),
+                      boxShadow: [
+                        BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10.r, offset: Offset(0, 4.h)),
+                      ],
+                    ),
+                    child: Icon(Icons.person_rounded, size: 40.sp, color: AppColors.white),
+                  ),
+                  SizedBox(height: 12.h),
+
+                  // User Name
+                  Text(
+                    "${'welcome_'.tr} ${controller.profileModel.value?.data?.fullName ?? ""}",
+                    style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white, fontSize: 20.sp),
+                  ),
+                  SizedBox(height: 4.h),
+
+                  // User Email or Status
+                  Text(
+                    'explore_courses'.tr,
+                    style: AppTextStyles.caption().copyWith(color: AppColors.white.withOpacity(0.85), fontSize: 14.sp),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 

@@ -17,4 +17,5 @@ class EndPoint {
   static const Login = "$baseurl/UserLogin/loginuser";
   static const commissionsAPI = "$baseurl/success/commissions";
   static const profileAPI = "$baseurl/users";
+  static const userVideoProgress = "$baseurl/UserVideoProgress/save";
 }
