@@ -1,4 +1,4 @@
-package com.vs.utthamgyaankamao.uttham_gyaan
+package com.vs.utthamgyaankamao
 
 import io.flutter.embedding.android.FlutterActivity
 

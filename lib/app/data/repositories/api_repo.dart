@@ -49,7 +49,7 @@ class APIRepo extends APIRepoRistory {
   @override
   Future<dynamic> fetchMyCourseVideo({String? query}) async {
     try {
-      final res = await BaseClient.post(api: EndPoint.myCourse, data: {"UserID": 1, "Search": query ?? ""});
+      final res = await BaseClient.post(api: EndPoint.myCourse, data: {"UserID": userId, "Search": query ?? ""});
       if (res != null && res.statusCode == 200) {
         return res;
       } else {
