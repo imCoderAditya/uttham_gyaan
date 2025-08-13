@@ -226,10 +226,10 @@ class ProfileView extends GetView<ProfileController> {
           icon: Container(
             padding: EdgeInsets.all(8.w),
             decoration: BoxDecoration(
-              color: AppColors.white.withOpacity(0.2),
+              // color: AppColors.white.withOpacity(0.2),
               borderRadius: BorderRadius.circular(12.r),
             ),
-            child: Icon(Icons.edit_outlined, color: AppColors.white, size: 20.sp),
+            // child: Icon(Icons.edit_outlined, color: AppColors.white, size: 20.sp),
           ),
         ),
         SizedBox(width: 8.w),

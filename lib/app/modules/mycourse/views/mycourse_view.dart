@@ -12,7 +12,8 @@ import 'package:uttham_gyaan/components/app_drawer.dart';
 import '../controllers/mycourse_controller.dart';
 
 class MycourseView extends GetView<MycourseController> {
-  const MycourseView({super.key});
+  final bool? isMenuDisable;
+  const MycourseView({super.key, this.isMenuDisable = false});
 
   @override
   Widget build(BuildContext context) {
@@ -24,20 +25,27 @@ class MycourseView extends GetView<MycourseController> {
         return Obx(() {
           final courses = controller.myCourseModel.value?.myCourseData ?? [];
           return Scaffold(
-            drawer: AppDrawer(),
+            drawer: isMenuDisable == true ? null:AppDrawer(),
             backgroundColor: theme.scaffoldBackgroundColor,
             appBar: _buildAppBar(context, controller),
             body: Column(
               children: [
                 _buildSearchBar(context, controller),
-                _buildSectionHeader(context, 'my_courses'.tr, controller.myCourseModel.value?.total ?? 0),
+                _buildSectionHeader(
+                  context,
+                  'my_courses'.tr,
+                  controller.myCourseModel.value?.total ?? 0,
+                ),
 
                 Expanded(
                   child: Obx(() {
                     if (controller.isLoading.value && courses.isEmpty) {
                       return Center(child: CircularProgressIndicator());
                     } else if (!controller.isLoading.value && courses.isEmpty) {
-                      return _buildEmptyState(context, controller.searchController.text.isNotEmpty);
+                      return _buildEmptyState(
+                        context,
+                        controller.searchController.text.isNotEmpty,
+                      );
                     } else {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -46,19 +54,25 @@ class MycourseView extends GetView<MycourseController> {
                           shrinkWrap: true,
                           physics: AlwaysScrollableScrollPhysics(),
                           itemCount: courses.length,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.75,
-                            crossAxisSpacing: 12.w,
-                            mainAxisSpacing: 12.h,
-                          ),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 0.75,
+                                crossAxisSpacing: 12.w,
+                                mainAxisSpacing: 12.h,
+                              ),
                           itemBuilder:
                               (context, index) => GestureDetector(
                                 onTap: () {
-                                  controller.fetchAllCourseVideo(courses[index].courseId);
+                                  controller.fetchAllCourseVideo(
+                                    courses[index].courseId,
+                                  );
                                   Get.to(MyVideoView());
                                 },
-                                child: _buildCourseCard(context, courses[index]),
+                                child: _buildCourseCard(
+                                  context,
+                                  courses[index],
+                                ),
                               ),
                         ),
                       );
@@ -73,7 +87,10 @@ class MycourseView extends GetView<MycourseController> {
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context, MycourseController controller) {
+  PreferredSizeWidget _buildAppBar(
+    BuildContext context,
+    MycourseController controller,
+  ) {
     return AppBar(
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -86,7 +103,10 @@ class MycourseView extends GetView<MycourseController> {
           ),
         ),
       ),
-      title: Text('my_courses'.tr, style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white)),
+      title: Text(
+        'my_courses'.tr,
+        style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white),
+      ),
     );
   }
 
@@ -101,7 +121,10 @@ class MycourseView extends GetView<MycourseController> {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: theme.brightness == Brightness.dark ? Colors.black.withOpacity(0.3) : Colors.black.withOpacity(0.08),
+            color:
+                theme.brightness == Brightness.dark
+                    ? Colors.black.withOpacity(0.3)
+                    : Colors.black.withOpacity(0.08),
             blurRadius: 8.r,
             offset: Offset(0, 2.h),
           ),
@@ -114,19 +137,32 @@ class MycourseView extends GetView<MycourseController> {
         },
         decoration: InputDecoration(
           hintText: 'search_courses'.tr,
-          hintStyle: AppTextStyles.body().copyWith(color: AppTextStyles.caption().color),
-          prefixIcon: Icon(Icons.search_rounded, color: colorScheme.primary, size: 24.sp),
+          hintStyle: AppTextStyles.body().copyWith(
+            color: AppTextStyles.caption().color,
+          ),
+          prefixIcon: Icon(
+            Icons.search_rounded,
+            color: colorScheme.primary,
+            size: 24.sp,
+          ),
           suffixIcon: Obx(() {
             controller.isLoading.value;
             return controller.searchController.text.isNotEmpty
                 ? IconButton(
-                  icon: Icon(Icons.clear_rounded, color: AppTextStyles.caption().color, size: 20.sp),
+                  icon: Icon(
+                    Icons.clear_rounded,
+                    color: AppTextStyles.caption().color,
+                    size: 20.sp,
+                  ),
                   onPressed: controller.clearSearch,
                 )
                 : const SizedBox.shrink();
           }),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 16.w,
+            vertical: 16.h,
+          ),
         ),
       ),
     );
@@ -143,10 +179,16 @@ class MycourseView extends GetView<MycourseController> {
           Container(
             width: 4.w,
             height: 24.h,
-            decoration: BoxDecoration(color: colorScheme.primary, borderRadius: BorderRadius.circular(2.r)),
+            decoration: BoxDecoration(
+              color: colorScheme.primary,
+              borderRadius: BorderRadius.circular(2.r),
+            ),
           ),
           SizedBox(width: 12.w),
-          Text(title, style: AppTextStyles.headlineLarge().copyWith(fontSize: 22.sp)),
+          Text(
+            title,
+            style: AppTextStyles.headlineLarge().copyWith(fontSize: 22.sp),
+          ),
           const Spacer(),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
@@ -179,7 +221,10 @@ class MycourseView extends GetView<MycourseController> {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: isDark ? Colors.black.withOpacity(0.3) : Colors.black.withOpacity(0.08),
+            color:
+                isDark
+                    ? Colors.black.withOpacity(0.3)
+                    : Colors.black.withOpacity(0.08),
             blurRadius: 8.r,
             offset: Offset(0, 4.h),
           ),
@@ -196,7 +241,10 @@ class MycourseView extends GetView<MycourseController> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
                 gradient: LinearGradient(
-                  colors: [colorScheme.primary.withOpacity(0.8), colorScheme.secondary.withOpacity(0.8)],
+                  colors: [
+                    colorScheme.primary.withOpacity(0.8),
+                    colorScheme.secondary.withOpacity(0.8),
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -205,13 +253,17 @@ class MycourseView extends GetView<MycourseController> {
                 children: [
                   course.thumbnailUrl != null
                       ? ClipRRect(
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(16.r),
+                        ),
                         child: Image.network(
                           course.thumbnailUrl!,
                           fit: BoxFit.cover,
                           width: double.infinity,
                           height: double.infinity,
-                          errorBuilder: (context, error, stackTrace) => _buildPlaceholderImage(context),
+                          errorBuilder:
+                              (context, error, stackTrace) =>
+                                  _buildPlaceholderImage(context),
                         ),
                       )
                       : _buildPlaceholderImage(context),
@@ -221,13 +273,21 @@ class MycourseView extends GetView<MycourseController> {
                     top: 8.h,
                     right: 8.w,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 6.w,
+                        vertical: 2.h,
+                      ),
                       decoration: BoxDecoration(
-                        color: (course.isPublished == true) ? AppColors.sucessPrimary : AppColors.red,
+                        color:
+                            (course.isPublished == true)
+                                ? AppColors.sucessPrimary
+                                : AppColors.red,
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                       child: Text(
-                        (course.isPublished == true) ? 'published'.tr : 'draft'.tr,
+                        (course.isPublished == true)
+                            ? 'published'.tr
+                            : 'draft'.tr,
                         style: AppTextStyles.caption().copyWith(
                           fontSize: 8.sp,
                           fontWeight: FontWeight.bold,
@@ -251,7 +311,11 @@ class MycourseView extends GetView<MycourseController> {
                 // Title
                 Text(
                   course.title ?? 'untitled_course'.tr,
-                  style: AppTextStyles.body().copyWith(fontSize: 13.sp, fontWeight: FontWeight.bold, height: 1.2),
+                  style: AppTextStyles.body().copyWith(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.bold,
+                    height: 1.2,
+                  ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -260,7 +324,10 @@ class MycourseView extends GetView<MycourseController> {
                 // Language
                 if (course.language != null)
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 4.w,
+                      vertical: 2.h,
+                    ),
                     decoration: BoxDecoration(
                       color: colorScheme.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(4.r),
@@ -280,13 +347,27 @@ class MycourseView extends GetView<MycourseController> {
                 // Duration and Videos
                 Row(
                   children: [
-                    Icon(Icons.access_time, size: 11.sp, color: AppTextStyles.small().color),
+                    Icon(
+                      Icons.access_time,
+                      size: 11.sp,
+                      color: AppTextStyles.small().color,
+                    ),
                     SizedBox(width: 3.w),
-                    Text('${course.durationMinutes ?? 0}m', style: AppTextStyles.small().copyWith(fontSize: 9.sp)),
+                    Text(
+                      '${course.durationMinutes ?? 0}m',
+                      style: AppTextStyles.small().copyWith(fontSize: 9.sp),
+                    ),
                     const Spacer(),
-                    Icon(Icons.play_circle_outline, size: 11.sp, color: AppTextStyles.small().color),
+                    Icon(
+                      Icons.play_circle_outline,
+                      size: 11.sp,
+                      color: AppTextStyles.small().color,
+                    ),
                     SizedBox(width: 3.w),
-                    Text('${course.videoCount ?? 0}', style: AppTextStyles.small().copyWith(fontSize: 9.sp)),
+                    Text(
+                      '${course.videoCount ?? 0}',
+                      style: AppTextStyles.small().copyWith(fontSize: 9.sp),
+                    ),
                   ],
                 ),
                 SizedBox(height: 6.h),
@@ -294,7 +375,10 @@ class MycourseView extends GetView<MycourseController> {
                 // Price
                 if (course.mrp != null)
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 6.w,
+                      vertical: 3.h,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.sucessPrimary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(6.r),
@@ -323,13 +407,22 @@ class MycourseView extends GetView<MycourseController> {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [colorScheme.primary.withOpacity(0.3), colorScheme.secondary.withOpacity(0.3)],
+          colors: [
+            colorScheme.primary.withOpacity(0.3),
+            colorScheme.secondary.withOpacity(0.3),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
-      child: Center(child: Icon(Icons.play_circle_outline, size: 40.sp, color: AppColors.white.withOpacity(0.8))),
+      child: Center(
+        child: Icon(
+          Icons.play_circle_outline,
+          size: 40.sp,
+          color: AppColors.white.withOpacity(0.8),
+        ),
+      ),
     );
   }
 
@@ -357,10 +450,15 @@ class MycourseView extends GetView<MycourseController> {
             color: AppTextStyles.caption().color,
           ),
           SizedBox(height: 16.h),
-          Text(isSearching ? 'no_search_results'.tr : 'no_courses_enrolled'.tr, style: AppTextStyles.headlineMedium()),
+          Text(
+            isSearching ? 'no_search_results'.tr : 'no_courses_enrolled'.tr,
+            style: AppTextStyles.headlineMedium(),
+          ),
           SizedBox(height: 8.h),
           Text(
-            isSearching ? 'try_different_keywords'.tr : 'enroll_in_courses_to_see_them_here'.tr,
+            isSearching
+                ? 'try_different_keywords'.tr
+                : 'enroll_in_courses_to_see_them_here'.tr,
             style: AppTextStyles.caption(),
             textAlign: TextAlign.center,
           ),
