@@ -1,3 +1,4 @@
+import 'package:uttham_gyaan/app/core/contants/constant.dart';
 import 'package:uttham_gyaan/app/core/utils/logger_utils.dart';
 import 'package:uttham_gyaan/app/data/baseclient/base_client.dart';
 import 'package:uttham_gyaan/app/data/endpoint/end_point.dart';
@@ -14,7 +15,15 @@ class APIRepo extends APIRepoRistory {
   @override
   Future fetchAllCourse({String? query, int? courseId}) async {
     try {
-      final res = await BaseClient.post(api: EndPoint.allcourse, data: {"courseid": courseId, "search": query});
+      final res = await BaseClient.post(
+        api: EndPoint.allcourse,
+        data: {
+          "courseid": courseId,
+          "search": query,
+          "Language":
+              getSavedLocale()?.languageCode == "hi" ? "Hindi" : "English",
+        },
+      );
 
       if (res != null && res.statusCode == 200) {
         return res;
@@ -32,7 +41,12 @@ class APIRepo extends APIRepoRistory {
     try {
       final res = await BaseClient.post(
         api: EndPoint.allCourseVideo,
-        data: {"CourseID": courseId, "search": query, "Language": "English"},
+        data: {
+          "CourseID": courseId,
+          "search": query,
+          "Language":
+              getSavedLocale()?.languageCode == "hi" ? "Hindi" : "English",
+        },
       );
 
       if (res != null && res.statusCode == 200) {
@@ -49,7 +63,15 @@ class APIRepo extends APIRepoRistory {
   @override
   Future<dynamic> fetchMyCourseVideo({String? query}) async {
     try {
-      final res = await BaseClient.post(api: EndPoint.myCourse, data: {"UserID": userId, "Search": query ?? ""});
+      final res = await BaseClient.post(
+        api: EndPoint.myCourse,
+        data: {
+          "UserID": userId,
+          "Search": query ?? "",
+          "Language":
+              getSavedLocale()?.languageCode == "hi" ? "Hindi" : "English",
+        },
+      );
       if (res != null && res.statusCode == 200) {
         return res;
       } else {

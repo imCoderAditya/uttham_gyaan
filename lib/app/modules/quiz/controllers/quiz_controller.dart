@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:uttham_gyaan/app/core/contants/constant.dart';
 import 'package:uttham_gyaan/app/data/baseclient/base_client.dart';
 import 'package:uttham_gyaan/app/data/model/quiz/quiz_model.dart';
 import 'package:uttham_gyaan/app/modules/video/controllers/video_controller.dart';
@@ -31,7 +32,8 @@ class QuizController extends GetxController {
     try {
       isLoading.value = true;
       final res = await BaseClient.get(
-        api: "https://uttamgyanapi.veteransoftwares.com/api/QuizResponse/unanswered?userId=$userId&videoId=$videoId",
+        api:
+            "https://uttamgyanapi.veteransoftwares.com/api/QuizResponse/unanswered?userId=$userId&videoId=$videoId&language=${getSavedLocale()?.languageCode == "hi" ? "Hindi" : "English"}",
       );
 
       if (res != null && res.statusCode == 200) {
@@ -52,7 +54,9 @@ class QuizController extends GetxController {
   // Get current quiz question
   Quiz? getCurrentQuiz() {
     final quizData = quizModel.value?.data;
-    if (quizData != null && currentQuestionIndex.value >= 0 && currentQuestionIndex.value < quizData.length) {
+    if (quizData != null &&
+        currentQuestionIndex.value >= 0 &&
+        currentQuestionIndex.value < quizData.length) {
       return quizData[currentQuestionIndex.value];
     }
     return null;
@@ -108,8 +112,13 @@ class QuizController extends GetxController {
     try {
       isSubmittingAnswer.value = true;
       final response = await BaseClient.post(
-        api: "https://uttamgyanapi.veteransoftwares.com/api/QuizResponse/record-response",
-        data: {"UserID": userId, "QuizID": quizId, "SelectedOptionID": selectedOptionId},
+        api:
+            "https://uttamgyanapi.veteransoftwares.com/api/QuizResponse/record-response",
+        data: {
+          "UserID": userId,
+          "QuizID": quizId,
+          "SelectedOptionID": selectedOptionId,
+        },
       );
 
       if (response != null && response.statusCode == 200) {

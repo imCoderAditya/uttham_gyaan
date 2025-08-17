@@ -3,9 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
 import 'package:uttham_gyaan/app/data/model/wallet/wallet_model.dart';
+import 'package:uttham_gyaan/app/services/storage/local_storage_service.dart';
 import 'package:uttham_gyaan/components/app_drawer.dart';
 
 import '../controllers/wallet_controller.dart';
@@ -16,7 +18,7 @@ class WalletView extends GetView<WalletController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    final userId = LocalStorageService.getUserId();
     return GetBuilder(
       autoRemove: false,
       init: WalletController(),
@@ -30,7 +32,10 @@ class WalletView extends GetView<WalletController> {
             return controller.walletModel.value == null
                 ? _buildLoadingState()
                 : SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 24.h,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -41,6 +46,11 @@ class WalletView extends GetView<WalletController> {
                       _buildQuickStats(context, dashboardData),
                       SizedBox(height: 24.h),
                       _buildReferralSection(context, dashboardData),
+                      SizedBox(height: 20.h),
+                      referralLinkButton(
+                        context,
+                        "https://utthamgyaankamao.com/Registration.aspx?ReferredByUserID=$userId",
+                      ),
                     ],
                   ),
                 );
@@ -72,7 +82,10 @@ class WalletView extends GetView<WalletController> {
           ),
         ),
       ),
-      title: Text('my_wallet'.tr, style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white)),
+      title: Text(
+        'my_wallet'.tr,
+        style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white),
+      ),
     );
   }
 
@@ -82,7 +95,10 @@ class WalletView extends GetView<WalletController> {
       duration: Duration(milliseconds: 600),
       child: Text(
         "${'hello'.tr} $name",
-        style: AppTextStyles.headlineMedium().copyWith(fontSize: 24.sp, fontWeight: FontWeight.w600),
+        style: AppTextStyles.headlineMedium().copyWith(
+          fontSize: 24.sp,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
@@ -94,13 +110,20 @@ class WalletView extends GetView<WalletController> {
       padding: EdgeInsets.all(24.w),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppColors.primaryColor, AppColors.accentColor.withOpacity(0.8)],
+          colors: [
+            AppColors.primaryColor,
+            AppColors.accentColor.withOpacity(0.8),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
-          BoxShadow(color: AppColors.sucessPrimary.withOpacity(0.3), blurRadius: 20.r, offset: Offset(0, 8.h)),
+          BoxShadow(
+            color: AppColors.sucessPrimary.withOpacity(0.3),
+            blurRadius: 20.r,
+            offset: Offset(0, 8.h),
+          ),
         ],
       ),
       child: Column(
@@ -111,7 +134,10 @@ class WalletView extends GetView<WalletController> {
             children: [
               Text(
                 'total_balance'.tr,
-                style: AppTextStyles.body().copyWith(color: Colors.white.withOpacity(0.9), fontSize: 16.sp),
+                style: AppTextStyles.body().copyWith(
+                  color: Colors.white.withOpacity(0.9),
+                  fontSize: 16.sp,
+                ),
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
@@ -119,7 +145,11 @@ class WalletView extends GetView<WalletController> {
                   color: Colors.white.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(20.r),
                 ),
-                child: Icon(Icons.account_balance_wallet, color: Colors.white, size: 20.sp),
+                child: Icon(
+                  Icons.account_balance_wallet,
+                  color: Colors.white,
+                  size: 20.sp,
+                ),
               ),
             ],
           ),
@@ -135,7 +165,10 @@ class WalletView extends GetView<WalletController> {
           SizedBox(height: 8.h),
           Text(
             'available_commission'.tr,
-            style: AppTextStyles.caption().copyWith(color: Colors.white.withOpacity(0.8), fontSize: 14.sp),
+            style: AppTextStyles.caption().copyWith(
+              color: Colors.white.withOpacity(0.8),
+              fontSize: 14.sp,
+            ),
           ),
         ],
       ),
@@ -148,7 +181,10 @@ class WalletView extends GetView<WalletController> {
       children: [
         Text(
           'overView'.tr,
-          style: AppTextStyles.headlineMedium().copyWith(fontSize: 20.sp, fontWeight: FontWeight.w600),
+          style: AppTextStyles.headlineMedium().copyWith(
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         SizedBox(height: 16.h),
         GridView.count(
@@ -193,7 +229,13 @@ class WalletView extends GetView<WalletController> {
     );
   }
 
-  Widget _buildEnhancedMetricCard(BuildContext context, String title, String value, IconData icon, Color accentColor) {
+  Widget _buildEnhancedMetricCard(
+    BuildContext context,
+    String title,
+    String value,
+    IconData icon,
+    Color accentColor,
+  ) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
@@ -208,7 +250,10 @@ class WalletView extends GetView<WalletController> {
         border: Border.all(color: accentColor.withOpacity(0.1), width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: isDark ? Colors.black.withOpacity(0.2) : Colors.black.withOpacity(0.06),
+            color:
+                isDark
+                    ? Colors.black.withOpacity(0.2)
+                    : Colors.black.withOpacity(0.06),
             blurRadius: 12.r,
             offset: Offset(0, 4.h),
           ),
@@ -245,7 +290,10 @@ class WalletView extends GetView<WalletController> {
               SizedBox(height: 4.h),
               Text(
                 title,
-                style: AppTextStyles.caption().copyWith(fontSize: 12.sp, fontWeight: FontWeight.w500),
+                style: AppTextStyles.caption().copyWith(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -266,7 +314,10 @@ class WalletView extends GetView<WalletController> {
       children: [
         Text(
           'referral_program'.tr,
-          style: AppTextStyles.headlineMedium().copyWith(fontSize: 20.sp, fontWeight: FontWeight.w600),
+          style: AppTextStyles.headlineMedium().copyWith(
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         SizedBox(height: 16.h),
         AnimatedContainer(
@@ -276,10 +327,16 @@ class WalletView extends GetView<WalletController> {
           decoration: BoxDecoration(
             color: colorScheme.surface,
             borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(color: colorScheme.outline.withOpacity(0.1), width: 1),
+            border: Border.all(
+              color: colorScheme.outline.withOpacity(0.1),
+              width: 1,
+            ),
             boxShadow: [
               BoxShadow(
-                color: isDark ? Colors.black.withOpacity(0.2) : Colors.black.withOpacity(0.06),
+                color:
+                    isDark
+                        ? Colors.black.withOpacity(0.2)
+                        : Colors.black.withOpacity(0.06),
                 blurRadius: 15.r,
                 offset: Offset(0, 5.h),
               ),
@@ -304,7 +361,10 @@ class WalletView extends GetView<WalletController> {
                   SizedBox(width: 12.w),
                   Text(
                     'referral_stats'.tr,
-                    style: AppTextStyles.headlineMedium().copyWith(fontSize: 18.sp, fontWeight: FontWeight.w600),
+                    style: AppTextStyles.headlineMedium().copyWith(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),
@@ -319,7 +379,11 @@ class WalletView extends GetView<WalletController> {
                     Icons.person_add,
                     Colors.blue,
                   ),
-                  Container(width: 1, height: 60.h, color: colorScheme.outline.withOpacity(0.2)),
+                  Container(
+                    width: 1,
+                    height: 60.h,
+                    color: colorScheme.outline.withOpacity(0.2),
+                  ),
                   _buildReferralStatCard(
                     context,
                     'converted'.tr,
@@ -327,7 +391,11 @@ class WalletView extends GetView<WalletController> {
                     Icons.done_all,
                     Colors.green,
                   ),
-                  Container(width: 1, height: 60.h, color: colorScheme.outline.withOpacity(0.2)),
+                  Container(
+                    width: 1,
+                    height: 60.h,
+                    color: colorScheme.outline.withOpacity(0.2),
+                  ),
                   _buildReferralStatCard(
                     context,
                     'commission_earned'.tr,
@@ -344,28 +412,92 @@ class WalletView extends GetView<WalletController> {
     );
   }
 
-  Widget _buildReferralStatCard(BuildContext context, String title, String value, IconData icon, Color color) {
+  Widget _buildReferralStatCard(
+    BuildContext context,
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Column(
       children: [
         Container(
           padding: EdgeInsets.all(8.w),
-          decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(10.r)),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(10.r),
+          ),
           child: Icon(icon, color: color, size: 20.sp),
         ),
         SizedBox(height: 8.h),
         Text(
           value,
-          style: AppTextStyles.headlineMedium().copyWith(fontSize: 20.sp, fontWeight: FontWeight.bold, color: color),
+          style: AppTextStyles.headlineMedium().copyWith(
+            fontSize: 20.sp,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
         ),
         SizedBox(height: 4.h),
         Text(
           title,
-          style: AppTextStyles.caption().copyWith(fontSize: 11.sp, fontWeight: FontWeight.w500),
+          style: AppTextStyles.caption().copyWith(
+            fontSize: 11.sp,
+            fontWeight: FontWeight.w500,
+          ),
           textAlign: TextAlign.center,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
       ],
+    );
+  }
+
+  Widget referralLinkButton(BuildContext context, String referralLink) {
+    return GestureDetector(
+      onTap: () {
+        Share.share(referralLink, subject: "Join with my referral link!");
+      },
+      child: Container(
+        width: double.infinity,
+        height: 50.h,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [
+              AppColors.primaryColor,
+              AppColors.accentColor,
+            ], // Purple → Blue
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 6,
+              offset: Offset(2, 3),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(Icons.share, color: AppColors.white, size: 22),
+            SizedBox(width: 10),
+            Text(
+              "Share Referral Link",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppColors.white,
+                letterSpacing: 0.5,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
