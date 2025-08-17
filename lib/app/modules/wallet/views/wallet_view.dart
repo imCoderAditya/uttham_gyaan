@@ -483,11 +483,11 @@ class WalletView extends GetView<WalletController> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children:  [
             Icon(Icons.share, color: AppColors.white, size: 22),
             SizedBox(width: 10),
             Text(
-              "Share Referral Link",
+              "shareReferralLink".tr,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
