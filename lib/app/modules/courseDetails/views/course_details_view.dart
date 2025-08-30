@@ -46,7 +46,10 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                   Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [colorScheme.primary.withOpacity(0.8), colorScheme.secondary.withOpacity(0.8)],
+                        colors: [
+                          colorScheme.primary.withOpacity(0.8),
+                          colorScheme.secondary.withOpacity(0.8),
+                        ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -56,7 +59,9 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                             ? Image.network(
                               courseData!.thumbnailUrl!,
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) => _buildPlaceholderThumbnail(context),
+                              errorBuilder:
+                                  (context, error, stackTrace) =>
+                                      _buildPlaceholderThumbnail(context),
                             )
                             : _buildPlaceholderThumbnail(context),
                   ),
@@ -66,7 +71,10 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withOpacity(0.7),
+                        ],
                       ),
                     ),
                   ),
@@ -79,11 +87,19 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                         color: AppColors.white.withOpacity(0.9),
                         shape: BoxShape.circle,
                         boxShadow: [
-                          BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 15, offset: const Offset(0, 5)),
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 15,
+                            offset: const Offset(0, 5),
+                          ),
                         ],
                       ),
                       child: IconButton(
-                        icon: Icon(Icons.play_arrow_rounded, size: 40.sp, color: colorScheme.primary),
+                        icon: Icon(
+                          Icons.play_arrow_rounded,
+                          size: 40.sp,
+                          color: colorScheme.primary,
+                        ),
                         onPressed: () {
                           _showVideoPlayer(context);
                         },
@@ -99,7 +115,10 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                 color: Colors.black.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(12.r),
               ),
-              child: IconButton(icon: Icon(Icons.arrow_back, color: AppColors.white), onPressed: () => Get.back()),
+              child: IconButton(
+                icon: Icon(Icons.arrow_back, color: AppColors.white),
+                onPressed: () => Get.back(),
+              ),
             ),
             actions: [
               Container(
@@ -130,7 +149,11 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                 children: [
                   // Course Header Info
                   Padding(
-                    padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 10.h),
+                    padding: EdgeInsets.only(
+                      left: 10.w,
+                      right: 10.w,
+                      top: 10.h,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -162,7 +185,8 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                             SizedBox(width: 12.w),
                             _buildStatChip(
                               icon: Icons.language,
-                              label: courseData?.language?.toString() ?? 'English',
+                              label:
+                                  courseData?.language?.toString() ?? 'English',
                               color: AppColors.sucessPrimary,
                             ),
                           ],
@@ -172,7 +196,10 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                         // Price Section
                         if (courseData?.mrp != null)
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 20.w,
+                              vertical: 12.h,
+                            ),
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
@@ -181,20 +208,27 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                                 ],
                               ),
                               borderRadius: BorderRadius.circular(16.r),
-                              border: Border.all(color: AppColors.sucessPrimary.withOpacity(0.3)),
+                              border: Border.all(
+                                color: AppColors.sucessPrimary.withOpacity(0.3),
+                              ),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.local_offer, color: AppColors.sucessPrimary, size: 20.sp),
+                                Icon(
+                                  Icons.local_offer,
+                                  color: AppColors.sucessPrimary,
+                                  size: 20.sp,
+                                ),
                                 SizedBox(width: 8.w),
                                 Text(
                                   '₹${courseData!.mrp!.toStringAsFixed(0)}',
-                                  style: AppTextStyles.headlineMedium().copyWith(
-                                    color: AppColors.sucessPrimary,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.sp,
-                                  ),
+                                  style: AppTextStyles.headlineMedium()
+                                      .copyWith(
+                                        color: AppColors.sucessPrimary,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20.sp,
+                                      ),
                                 ),
                               ],
                             ),
@@ -214,11 +248,14 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                           return Center(child: CircularProgressIndicator());
                         }
 
-                        if (controller.videoModel.value?.data?.isEmpty ?? true) {
+                        if (controller.videoModel.value?.data?.isEmpty ??
+                            true) {
                           return Center(
                             child: Text(
                               'No videos available',
-                              style: AppTextStyles.body().copyWith(color: colorScheme.onSurface.withOpacity(0.6)),
+                              style: AppTextStyles.body().copyWith(
+                                color: colorScheme.onSurface.withOpacity(0.6),
+                              ),
                             ),
                           );
                         }
@@ -227,9 +264,11 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                           clipBehavior: Clip.none,
                           scrollDirection: Axis.horizontal,
                           padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          itemCount: controller.videoModel.value?.data?.length ?? 0,
+                          itemCount:
+                              controller.videoModel.value?.data?.length ?? 0,
                           itemBuilder: (context, index) {
-                            final video = controller.videoModel.value?.data?[index];
+                            final video =
+                                controller.videoModel.value?.data?[index];
 
                             return _buildVideoCard(context, video!, index);
                           },
@@ -244,7 +283,9 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                     title: 'About This Course',
                     content: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      child: HtmlWidgetUI(htmlContent: courseData?.description ?? ""),
+                      child: HtmlWidgetUI(
+                        htmlContent: courseData?.description ?? "",
+                      ),
                     ),
                   ),
 
@@ -256,11 +297,36 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Column(
                         children: [
-                          _buildContentItem(context, title: 'Introduction', duration: '5:30', isLocked: false),
-                          _buildContentItem(context, title: 'Getting Started', duration: '12:45', isLocked: false),
-                          _buildContentItem(context, title: 'Advanced Concepts', duration: '18:20', isLocked: true),
-                          _buildContentItem(context, title: 'Practical Examples', duration: '25:15', isLocked: true),
-                          _buildContentItem(context, title: 'Final Assessment', duration: '8:10', isLocked: true),
+                          _buildContentItem(
+                            context,
+                            title: 'Introduction',
+                            duration: '5:30',
+                            isLocked: false,
+                          ),
+                          _buildContentItem(
+                            context,
+                            title: 'Getting Started',
+                            duration: '12:45',
+                            isLocked: false,
+                          ),
+                          _buildContentItem(
+                            context,
+                            title: 'Advanced Concepts',
+                            duration: '18:20',
+                            isLocked: true,
+                          ),
+                          _buildContentItem(
+                            context,
+                            title: 'Practical Examples',
+                            duration: '25:15',
+                            isLocked: true,
+                          ),
+                          _buildContentItem(
+                            context,
+                            title: 'Final Assessment',
+                            duration: '8:10',
+                            isLocked: true,
+                          ),
                         ],
                       ),
                     ),
@@ -277,7 +343,11 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                           CircleAvatar(
                             radius: 30.r,
                             backgroundColor: colorScheme.primary,
-                            child: Icon(Icons.person, size: 30.sp, color: AppColors.white),
+                            child: Icon(
+                              Icons.person,
+                              size: 30.sp,
+                              color: AppColors.white,
+                            ),
                           ),
                           SizedBox(width: 16.w),
                           Expanded(
@@ -286,13 +356,15 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                               children: [
                                 Text(
                                   'Expert Instructor',
-                                  style: AppTextStyles.headlineMedium().copyWith(fontWeight: FontWeight.bold),
+                                  style: AppTextStyles.headlineMedium()
+                                      .copyWith(fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(height: 4.h),
                                 Text(
                                   'Professional educator with 10+ years experience',
                                   style: AppTextStyles.body().copyWith(
-                                    color: theme.colorScheme.onSurface.withOpacity(0.7),
+                                    color: theme.colorScheme.onSurface
+                                        .withOpacity(0.7),
                                   ),
                                 ),
                               ],
@@ -321,10 +393,15 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
           },
           backgroundColor: colorScheme.primary,
           elevation: 8,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.r),
+          ),
           label: Text(
             'Enroll Now',
-            style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white, fontWeight: FontWeight.bold),
+            style: AppTextStyles.headlineMedium().copyWith(
+              color: AppColors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           icon: Icon(Icons.play_arrow, color: AppColors.white, size: 24.sp),
         ),
@@ -347,7 +424,13 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(color: theme.dividerColor.withOpacity(0.3)),
-        boxShadow: [BoxShadow(color: colorScheme.shadow.withOpacity(0.1), blurRadius: 10, offset: Offset(0, 4))],
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.shadow.withOpacity(0.1),
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -357,11 +440,17 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
             height: 120.h,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [colorScheme.primary.withOpacity(0.8), colorScheme.secondary.withOpacity(0.8)],
+                colors: [
+                  colorScheme.primary.withOpacity(0.8),
+                  colorScheme.secondary.withOpacity(0.8),
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(thumbnailUrl)),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(thumbnailUrl),
+              ),
               borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
             ),
             child: Stack(
@@ -371,7 +460,10 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                   child: Container(
                     width: 50.w,
                     height: 50.w,
-                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.5), shape: BoxShape.circle),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.5),
+                      shape: BoxShape.circle,
+                    ),
                     child: Icon(
                       isLocked ? Icons.lock : Icons.play_arrow,
                       size: 24.sp,
@@ -385,14 +477,20 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                   bottom: 8.h,
                   right: 8.w,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 8.w,
+                      vertical: 4.h,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.7),
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Text(
                       '${video.durationMinutes ?? 0}:00',
-                      style: AppTextStyles.caption().copyWith(color: Colors.white, fontSize: 10.sp),
+                      style: AppTextStyles.caption().copyWith(
+                        color: Colors.white,
+                        fontSize: 10.sp,
+                      ),
                     ),
                   ),
                 ),
@@ -403,7 +501,10 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                   child: Container(
                     width: 24.w,
                     height: 24.w,
-                    decoration: BoxDecoration(color: colorScheme.primary, shape: BoxShape.circle),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary,
+                      shape: BoxShape.circle,
+                    ),
                     child: Center(
                       child: Text(
                         '${video.sequenceOrder ?? index + 1}',
@@ -431,7 +532,10 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                     style: AppTextStyles.body().copyWith(
                       fontWeight: FontWeight.w600,
                       fontSize: 14.sp,
-                      color: isLocked ? colorScheme.onSurface.withOpacity(0.5) : null,
+                      color:
+                          isLocked
+                              ? colorScheme.onSurface.withOpacity(0.5)
+                              : null,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -439,7 +543,11 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                   SizedBox(height: 8.h),
                   Row(
                     children: [
-                      Icon(Icons.access_time, size: 12.sp, color: colorScheme.onSurface.withOpacity(0.6)),
+                      Icon(
+                        Icons.access_time,
+                        size: 12.sp,
+                        color: colorScheme.onSurface.withOpacity(0.6),
+                      ),
                       SizedBox(width: 4.w),
                       Text(
                         '${video.durationMinutes ?? 0} min',
@@ -449,7 +557,12 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                         ),
                       ),
                       Spacer(),
-                      if (isLocked) Icon(Icons.lock, size: 12.sp, color: colorScheme.primary.withOpacity(0.4)),
+                      if (isLocked)
+                        Icon(
+                          Icons.lock,
+                          size: 12.sp,
+                          color: colorScheme.primary.withOpacity(0.4),
+                        ),
                     ],
                   ),
                 ],
@@ -466,16 +579,29 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [colorScheme.primary.withOpacity(0.8), colorScheme.secondary.withOpacity(0.8)],
+          colors: [
+            colorScheme.primary.withOpacity(0.8),
+            colorScheme.secondary.withOpacity(0.8),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
       ),
-      child: Center(child: Icon(Icons.play_circle_outline, size: 80.sp, color: AppColors.white.withOpacity(0.8))),
+      child: Center(
+        child: Icon(
+          Icons.play_circle_outline,
+          size: 80.sp,
+          color: AppColors.white.withOpacity(0.8),
+        ),
+      ),
     );
   }
 
-  Widget _buildStatChip({required IconData icon, required String label, required Color color}) {
+  Widget _buildStatChip({
+    required IconData icon,
+    required String label,
+    required Color color,
+  }) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
       decoration: BoxDecoration(
@@ -490,14 +616,22 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
           SizedBox(width: 4.w),
           Text(
             label,
-            style: AppTextStyles.caption().copyWith(color: color, fontWeight: FontWeight.w600, fontSize: 12.sp),
+            style: AppTextStyles.caption().copyWith(
+              color: color,
+              fontWeight: FontWeight.w600,
+              fontSize: 12.sp,
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSection(BuildContext context, {required String title, required Widget content}) {
+  Widget _buildSection(
+    BuildContext context, {
+    required String title,
+    required Widget content,
+  }) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Column(
@@ -510,10 +644,19 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
               Container(
                 width: 4.w,
                 height: 20.h,
-                decoration: BoxDecoration(color: colorScheme.primary, borderRadius: BorderRadius.circular(2.r)),
+                decoration: BoxDecoration(
+                  color: colorScheme.primary,
+                  borderRadius: BorderRadius.circular(2.r),
+                ),
               ),
               SizedBox(width: 12.w),
-              Text(title, style: AppTextStyles.headlineMedium().copyWith(fontWeight: FontWeight.bold, fontSize: 18.sp)),
+              Text(
+                title,
+                style: AppTextStyles.headlineMedium().copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.sp,
+                ),
+              ),
             ],
           ),
         ),
@@ -545,12 +688,18 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
           width: 40.w,
           height: 40.w,
           decoration: BoxDecoration(
-            color: isLocked ? colorScheme.onSurface.withOpacity(0.1) : colorScheme.primary.withOpacity(0.1),
+            color:
+                isLocked
+                    ? colorScheme.onSurface.withOpacity(0.1)
+                    : colorScheme.primary.withOpacity(0.1),
             borderRadius: BorderRadius.circular(8.r),
           ),
           child: Icon(
             isLocked ? Icons.lock : Icons.play_arrow,
-            color: isLocked ? colorScheme.onSurface.withOpacity(0.5) : colorScheme.primary,
+            color:
+                isLocked
+                    ? colorScheme.onSurface.withOpacity(0.5)
+                    : colorScheme.primary,
             size: 20.sp,
           ),
         ),
@@ -564,7 +713,10 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
         trailing: Text(
           duration,
           style: AppTextStyles.caption().copyWith(
-            color: isLocked ? colorScheme.onSurface.withOpacity(0.5) : colorScheme.onSurface.withOpacity(0.7),
+            color:
+                isLocked
+                    ? colorScheme.onSurface.withOpacity(0.5)
+                    : colorScheme.onSurface.withOpacity(0.7),
           ),
         ),
         onTap: isLocked ? null : () {},
@@ -579,7 +731,12 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
           (context) => AlertDialog(
             title: Text('Video Player'),
             content: Text('YouTube video player will be implemented here'),
-            actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('Close'))],
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Close'),
+              ),
+            ],
           ),
     );
   }
@@ -591,7 +748,9 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
       context: context,
       builder:
           (context) => AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.r),
+            ),
             title: Row(
               children: [
                 Icon(Icons.school, color: colorScheme.primary),
@@ -618,7 +777,10 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                         SizedBox(width: 8.w),
                         Text(
                           'Course Fee: ₹${courseData!.mrp!.toStringAsFixed(0)}',
-                          style: TextStyle(color: AppColors.sucessPrimary, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            color: AppColors.sucessPrimary,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),
@@ -626,23 +788,29 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
               ],
             ),
             actions: [
-              TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Cancel'),
+              ),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  // TODO: Implement enrollment logic
-                  Get.snackbar(
-                    'Success',
-                    'Enrollment successful!',
-                    backgroundColor: AppColors.sucessPrimary,
-                    colorText: AppColors.white,
+                  controller.startPayment(
+                    amount: courseData?.mrp ?? 0,
+                    name: courseData?.title ?? "",
+                    description: courseData?.description ?? "",
                   );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colorScheme.primary,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
                 ),
-                child: Text('Enroll Now', style: TextStyle(color: AppColors.white)),
+                child: Text(
+                  'Enroll Now',
+                  style: TextStyle(color: AppColors.white),
+                ),
               ),
             ],
           ),
