@@ -43,7 +43,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
     final videoId = Get.arguments?['videoId'] ?? 0;
     final courseId = Get.arguments?['courseId'] ?? 0;
     debugPrint("CourseId $courseId\n videoId Id : $videoId");
-    // _videoController.getQuizResult(videoId: videoId);
+    _videoController.getQuizResult(videoId: videoId);
     _fetchVideoData(videoId);
   }
 
@@ -496,7 +496,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                     ? SizedBox(height: 40.h)
                     : SizedBox(),
                 (progress.isCompleted == true)
-                    ? (_videoController.isMatched.value == false)
+                    ? (_videoController.videoDetailsModel.value?.data?.isQuizCompleted==false) 
                         ? _buildAdditionalInfo(
                           video,
                           colorScheme,
@@ -508,7 +508,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                             onPressed: () {
                               showQuizResultDialog(
                                 context,
-                                _videoController.quizResult.value,
+                                _videoController.quizResultModel.value?.data?.firstOrNull,
                               );
                             },
                             color: AppColors.primaryColor,
@@ -913,12 +913,10 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
         ),
         SizedBox(height: 16.h),
         InkWell(
-          onTap: () {
-            if (isQuizCompleted == true) {
-              _videoController.showQuizResultDialog(Get.context!, _videoController.quizResultModel.value);
-            } else {
+          onTap: () async {
+           
               Get.to(QuizView(videoId: video.videoId));
-            }
+          
           },
           borderRadius: BorderRadius.circular(10.r),
           child: Container(
