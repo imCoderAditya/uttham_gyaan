@@ -178,6 +178,7 @@ class CarouselIndicator extends StatelessWidget {
 // =============================================================================
 class ImageCarouselSlider extends StatefulWidget {
   final List<CarouselItem> imageUrls;
+  
   final double height;
   final bool autoPlay;
   final Duration autoPlayInterval;
@@ -466,9 +467,9 @@ class CarouselExamplePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildImageCarouselSection(context),
+            // _buildImageCarouselSection(context),
             const SizedBox(height: 32),
-            _buildContentCarouselSection(context),
+            // _buildContentCarouselSection(context),
             const SizedBox(height: 32),
             _buildIndicatorExamplesSection(context),
             const SizedBox(height: 32),
@@ -476,75 +477,6 @@ class CarouselExamplePage extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildImageCarouselSection(BuildContext context) {
-    final contentItems = [
-      CarouselItem(
-        imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
-        title: 'Beautiful Landscape',
-        description: 'Explore the most beautiful landscapes around the world.',
-        onTap: () => print('Landscape tapped'),
-      ),
-      CarouselItem(
-        imageUrl: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800',
-        title: 'Mountain Adventure',
-        description: 'Discover amazing mountain trails and hiking spots.',
-        onTap: () => print('Mountain tapped'),
-      ),
-      CarouselItem(
-        imageUrl: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800',
-        title: 'Forest Escape',
-        description: 'Find peace in the serene forest environments.',
-        onTap: () => print('Forest tapped'),
-      ),
-    ];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Image Carousel', style: Theme.of(context).textTheme.headlineMedium),
-        const SizedBox(height: 16),
-        ImageCarouselSlider(imageUrls: contentItems, height: 200, autoPlay: true, indicatorStyle: IndicatorStyle.line),
-      ],
-    );
-  }
-
-  Widget _buildContentCarouselSection(BuildContext context) {
-    final contentItems = [
-      CarouselItem(
-        imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
-        title: 'Beautiful Landscape',
-        description: 'Explore the most beautiful landscapes around the world.',
-        onTap: () => print('Landscape tapped'),
-      ),
-      CarouselItem(
-        imageUrl: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800',
-        title: 'Mountain Adventure',
-        description: 'Discover amazing mountain trails and hiking spots.',
-        onTap: () => print('Mountain tapped'),
-      ),
-      CarouselItem(
-        imageUrl: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800',
-        title: 'Forest Escape',
-        description: 'Find peace in the serene forest environments.',
-        onTap: () => print('Forest tapped'),
-      ),
-    ];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Content Carousel', style: Theme.of(context).textTheme.headlineMedium),
-        const SizedBox(height: 16),
-        ContentCarouselSlider(
-          items: contentItems,
-          height: 340.h,
-          autoPlay: false,
-          indicatorStyle: IndicatorStyle.scale,
-        ),
-      ],
     );
   }
 

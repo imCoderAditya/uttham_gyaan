@@ -795,10 +795,10 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  controller.startPayment(
-                    amount: courseData?.mrp ?? 0,
-                    name: courseData?.title ?? "",
-                    description: courseData?.description ?? "",
+
+                  controller.orderPlace(
+                    courseID: courseData?.courseId,
+                    courseData: courseData,
                   );
                 },
                 style: ElevatedButton.styleFrom(

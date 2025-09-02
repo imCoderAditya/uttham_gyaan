@@ -47,6 +47,7 @@ class HomeView extends StatelessWidget {
                             height: 210,
                             onChange: (value) {
                               debugPrint("Response : ${value.id}");
+                                  // Get.to(CourseDetailsView(courseData:value));
                             },
                             autoPlay: true,
                             indicatorStyle: IndicatorStyle.line,
@@ -105,7 +106,7 @@ class HomeView extends StatelessWidget {
           ),
         ),
       ),
-      title: Text('Uttham Gyaan'.tr, style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white)),
+      title: Text('uttham_gyan'.tr, style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white)),
       actions: [
         Container(
           margin: EdgeInsets.only(right: 16.w, bottom: 5.h),

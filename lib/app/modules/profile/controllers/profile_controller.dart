@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+
 import 'package:get/get.dart';
 import 'package:uttham_gyaan/app/core/utils/logger_utils.dart';
 import 'package:uttham_gyaan/app/data/baseclient/base_client.dart';
@@ -10,6 +11,7 @@ import 'package:uttham_gyaan/app/services/storage/local_storage_service.dart';
 class ProfileController extends GetxController {
   Rxn<ProfileModel> profileModel = Rxn<ProfileModel>();
   Future<void> fetchProfile() async {
+  
     try {
       final userId = LocalStorageService.getUserId();
       final res = await BaseClient.get(api: "${EndPoint.profileAPI}?userid=$userId");

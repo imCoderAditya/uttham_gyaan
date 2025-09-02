@@ -43,22 +43,26 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
     final videoId = Get.arguments?['videoId'] ?? 0;
     final courseId = Get.arguments?['courseId'] ?? 0;
     debugPrint("CourseId $courseId\n videoId Id : $videoId");
-    _videoController.getQuizResult(courseId: courseId, videoId: videoId);
+    // _videoController.getQuizResult(videoId: videoId);
     _fetchVideoData(videoId);
   }
 
   void _initializeAnimations() {
-    _animationController = AnimationController(duration: const Duration(milliseconds: 800), vsync: this);
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
 
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.3),
       end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic));
+    ).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic),
+    );
   }
 
   Future<void> _fetchVideoData(int videoId) async {
@@ -66,7 +70,8 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
 
     await _videoController.fetchVideo(videoId);
 
-    if (_videoController.videoDetailsModel.value?.data?.video?.videoUrl != null) {
+    if (_videoController.videoDetailsModel.value?.data?.video?.videoUrl !=
+        null) {
       _initializeYouTubePlayer();
     }
 
@@ -75,9 +80,17 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
   }
 
   void _initializeYouTubePlayer() {
-    final videoUrl = _videoController.videoDetailsModel.value!.data!.video!.videoUrl!;
+    final videoUrl =
+        _videoController.videoDetailsModel.value!.data!.video!.videoUrl!;
     final extractedVideoId = YoutubePlayer.convertUrlToId(videoUrl) ?? '';
-    final watchedMinutes = _videoController.videoDetailsModel.value?.data?.progress?.watchedDurationMinutes ?? 0;
+    final watchedMinutes =
+        _videoController
+            .videoDetailsModel
+            .value
+            ?.data
+            ?.progress
+            ?.watchedDurationMinutes ??
+        0;
 
     _playerController = YoutubePlayerController(
       initialVideoId: extractedVideoId,
@@ -123,7 +136,10 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
       });
 
       if (_isFullScreen) {
-        SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ]);
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
       } else {
         SystemChrome.setPreferredOrientations(DeviceOrientation.values);
@@ -152,7 +168,10 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
 
   Future<void> timeUpdateVideo() async {
     final videoData = _videoController.videoDetailsModel.value?.data;
-    double percentage = calculateProgressPercentage(_currentPosition, _totalDuration);
+    double percentage = calculateProgressPercentage(
+      _currentPosition,
+      _totalDuration,
+    );
     debugPrint("Progress: ${percentage.toStringAsFixed(2)}%");
     final durato = _formatDuration(_currentPosition); // "02:35"
     final parts = durato.split(':'); // ["02", "35"]
@@ -182,7 +201,8 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
       }
 
       final videoData = _videoController.videoDetailsModel.value?.data?.video;
-      final progressData = _videoController.videoDetailsModel.value?.data?.progress;
+      final progressData =
+          _videoController.videoDetailsModel.value?.data?.progress;
 
       if (videoData == null) {
         return _buildErrorScreen(theme);
@@ -195,7 +215,10 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
         player: _buildYouTubePlayer(videoData),
         builder: (context, player) {
           if (orientation == Orientation.landscape && _isFullScreen) {
-            return Scaffold(backgroundColor: Colors.black, body: Center(child: player));
+            return Scaffold(
+              backgroundColor: Colors.black,
+              body: Center(child: player),
+            );
           }
 
           return Scaffold(
@@ -206,7 +229,13 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
               child: Column(
                 children: [
                   _buildVideoPlayer(player),
-                  _buildVideoContent(theme, colorScheme, isDark, videoData, progressData),
+                  _buildVideoContent(
+                    theme,
+                    colorScheme,
+                    isDark,
+                    videoData,
+                    progressData,
+                  ),
                 ],
               ),
             ),
@@ -229,17 +258,31 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
           ),
         ),
       ),
+      centerTitle: true,
       title: Text(
         'Video Player',
-        style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white, fontSize: 18.sp),
+        style: AppTextStyles.headlineMedium().copyWith(
+          color: AppColors.white,
+          fontSize: 18.sp,
+        ),
       ),
-      leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: AppColors.white), onPressed: () => Get.back()),
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back_ios, color: AppColors.white),
+        onPressed: () => Get.back(),
+      ),
       actions: [
         Container(
           margin: EdgeInsets.only(right: 16.w),
-          decoration: BoxDecoration(color: AppColors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(12.r)),
+          decoration: BoxDecoration(
+            color: AppColors.white.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(12.r),
+          ),
           child: IconButton(
-            icon: Icon(Icons.bookmark_border, color: AppColors.white, size: 20.sp),
+            icon: Icon(
+              Icons.bookmark_border,
+              color: AppColors.white,
+              size: 20.sp,
+            ),
             onPressed: () {
               // Add bookmark functionality
             },
@@ -278,7 +321,10 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
               SizedBox(height: 24.h),
               Text(
                 'Loading Video...',
-                style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white, fontWeight: FontWeight.w600),
+                style: AppTextStyles.headlineMedium().copyWith(
+                  color: AppColors.white,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),
@@ -308,14 +354,25 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                 color: AppColors.red.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(20.r),
               ),
-              child: Icon(Icons.error_outline, size: 64.sp, color: AppColors.red),
+              child: Icon(
+                Icons.error_outline,
+                size: 64.sp,
+                color: AppColors.red,
+              ),
             ),
             SizedBox(height: 24.h),
-            Text('Failed to Load Video', style: AppTextStyles.headlineMedium().copyWith(fontWeight: FontWeight.w600)),
+            Text(
+              'Failed to Load Video',
+              style: AppTextStyles.headlineMedium().copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
             SizedBox(height: 12.h),
             Text(
               'Please check your connection and try again',
-              style: AppTextStyles.body().copyWith(color: theme.colorScheme.onSurface.withOpacity(0.7)),
+              style: AppTextStyles.body().copyWith(
+                color: theme.colorScheme.onSurface.withOpacity(0.7),
+              ),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 32.h),
@@ -325,7 +382,9 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                 backgroundColor: AppColors.primaryColor,
                 foregroundColor: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
               ),
               child: Text('Go Back'),
             ),
@@ -351,12 +410,19 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
         Expanded(
           child: Text(
             video.title ?? 'Video Title',
-            style: const TextStyle(color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.w600),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16.0,
+              fontWeight: FontWeight.w600,
+            ),
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
           ),
         ),
-        IconButton(icon: const Icon(Icons.more_vert, color: Colors.white), onPressed: () => _showVideoOptions()),
+        IconButton(
+          icon: const Icon(Icons.more_vert, color: Colors.white),
+          onPressed: () => _showVideoOptions(),
+        ),
       ],
       onReady: () {
         debugPrint('YouTube Player Ready');
@@ -371,14 +437,26 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.black,
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 15.r, offset: Offset(0, 8.h))],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 15.r,
+              offset: Offset(0, 8.h),
+            ),
+          ],
         ),
         child: player,
       ),
     );
   }
 
-  Widget _buildVideoContent(ThemeData theme, ColorScheme colorScheme, bool isDark, Video video, progress) {
+  Widget _buildVideoContent(
+    ThemeData theme,
+    ColorScheme colorScheme,
+    bool isDark,
+    Video video,
+    progress,
+  ) {
     return Container(
       margin: EdgeInsets.only(top: 1.h),
       decoration: BoxDecoration(
@@ -414,25 +492,41 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                 _buildVideoStats(video, colorScheme),
                 SizedBox(height: 32.h),
                 _buildActionButtons(colorScheme),
-                progress.isCompleted == true ? SizedBox(height: 40.h) : SizedBox(),
+                progress.isCompleted == true
+                    ? SizedBox(height: 40.h)
+                    : SizedBox(),
                 (progress.isCompleted == true)
                     ? (_videoController.isMatched.value == false)
-                        ? _buildAdditionalInfo(video, colorScheme) // quiz section
+                        ? _buildAdditionalInfo(
+                          video,
+                          colorScheme,
+                        ) // quiz section
                         : Padding(
                           padding: const EdgeInsets.only(top: 30.0),
                           child: MaterialButton(
                             minWidth: double.infinity,
                             onPressed: () {
-                              showQuizResultDialog(context, _videoController.quizResult.value);
+                              showQuizResultDialog(
+                                context,
+                                _videoController.quizResult.value,
+                              );
                             },
                             color: AppColors.primaryColor,
                             elevation: 4,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 14,
+                            ),
                             splashColor: Colors.white.withOpacity(0.2),
                             child: Text(
                               "retake_quiz".tr,
-                              style: AppTextStyles.body().copyWith(color: AppColors.white, fontWeight: FontWeight.bold),
+                              style: AppTextStyles.body().copyWith(
+                                color: AppColors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         )
@@ -454,15 +548,25 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [AppColors.primaryColor.withOpacity(0.15), AppColors.primaryColor.withOpacity(0.05)],
+              colors: [
+                AppColors.primaryColor.withOpacity(0.15),
+                AppColors.primaryColor.withOpacity(0.05),
+              ],
             ),
             borderRadius: BorderRadius.circular(24.r),
-            border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 1),
+            border: Border.all(
+              color: AppColors.primaryColor.withOpacity(0.3),
+              width: 1,
+            ),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.play_circle_filled, size: 16.sp, color: AppColors.primaryColor),
+              Icon(
+                Icons.play_circle_filled,
+                size: 16.sp,
+                color: AppColors.primaryColor,
+              ),
               SizedBox(width: 8.w),
               Text(
                 video.courseTitle ?? '',
@@ -482,7 +586,11 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
             color: colorScheme.secondaryContainer.withOpacity(0.5),
             borderRadius: BorderRadius.circular(12.r),
           ),
-          child: Icon(Icons.share_outlined, size: 18.sp, color: colorScheme.onSecondaryContainer),
+          child: Icon(
+            Icons.share_outlined,
+            size: 18.sp,
+            color: colorScheme.onSecondaryContainer,
+          ),
         ),
       ],
     );
@@ -510,11 +618,20 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
         gradient: LinearGradient(
           colors:
               isDark
-                  ? [AppColors.primaryColor.withOpacity(0.12), AppColors.primaryColor.withOpacity(0.06)]
-                  : [AppColors.primaryColor.withOpacity(0.08), AppColors.primaryColor.withOpacity(0.03)],
+                  ? [
+                    AppColors.primaryColor.withOpacity(0.12),
+                    AppColors.primaryColor.withOpacity(0.06),
+                  ]
+                  : [
+                    AppColors.primaryColor.withOpacity(0.08),
+                    AppColors.primaryColor.withOpacity(0.03),
+                  ],
         ),
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: AppColors.primaryColor.withOpacity(0.2), width: 1.5),
+        border: Border.all(
+          color: AppColors.primaryColor.withOpacity(0.2),
+          width: 1.5,
+        ),
       ),
       child: Column(
         children: [
@@ -523,11 +640,18 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
             children: [
               Row(
                 children: [
-                  Icon(Icons.trending_up, size: 20.sp, color: AppColors.primaryColor),
+                  Icon(
+                    Icons.trending_up,
+                    size: 20.sp,
+                    color: AppColors.primaryColor,
+                  ),
                   SizedBox(width: 8.w),
                   Text(
                     'Your Progress',
-                    style: AppTextStyles.body().copyWith(fontWeight: FontWeight.w700, fontSize: 17.sp),
+                    style: AppTextStyles.body().copyWith(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 17.sp,
+                    ),
                   ),
                 ],
               ),
@@ -543,7 +667,10 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                 child: Text(
                   isCompleted ? 'Completed' : 'In Progress',
                   style: AppTextStyles.caption().copyWith(
-                    color: isCompleted ? AppColors.sucessPrimary : AppColors.primaryColor,
+                    color:
+                        isCompleted
+                            ? AppColors.sucessPrimary
+                            : AppColors.primaryColor,
                     fontWeight: FontWeight.w700,
                     fontSize: 11.sp,
                   ),
@@ -563,18 +690,29 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
               ),
               Container(
                 height: 10.h,
-                width: MediaQuery.of(context).size.width * (completionPercentage / 100),
+                width:
+                    MediaQuery.of(context).size.width *
+                    (completionPercentage / 100),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors:
                         isCompleted
-                            ? [AppColors.sucessPrimary, AppColors.sucessPrimary.withOpacity(0.8)]
-                            : [AppColors.primaryColor, AppColors.primaryColor.withOpacity(0.8)],
+                            ? [
+                              AppColors.sucessPrimary,
+                              AppColors.sucessPrimary.withOpacity(0.8),
+                            ]
+                            : [
+                              AppColors.primaryColor,
+                              AppColors.primaryColor.withOpacity(0.8),
+                            ],
                   ),
                   borderRadius: BorderRadius.circular(8.r),
                   boxShadow: [
                     BoxShadow(
-                      color: (isCompleted ? AppColors.sucessPrimary : AppColors.primaryColor).withOpacity(0.3),
+                      color: (isCompleted
+                              ? AppColors.sucessPrimary
+                              : AppColors.primaryColor)
+                          .withOpacity(0.3),
                       blurRadius: 4.r,
                       offset: Offset(0, 2.h),
                     ),
@@ -589,11 +727,17 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
             children: [
               Text(
                 '${completionPercentage.toStringAsFixed(1)}% Complete',
-                style: AppTextStyles.caption().copyWith(fontSize: 13.sp, fontWeight: FontWeight.w600),
+                style: AppTextStyles.caption().copyWith(
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               Text(
                 '${_formatDuration(_currentPosition)} / ${_formatDuration(_totalDuration)}',
-                style: AppTextStyles.caption().copyWith(fontSize: 13.sp, fontWeight: FontWeight.w600),
+                style: AppTextStyles.caption().copyWith(
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),
@@ -637,7 +781,10 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
       decoration: BoxDecoration(
         color: colorScheme.secondaryContainer.withOpacity(0.3),
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: colorScheme.outline.withOpacity(0.2), width: 1),
+        border: Border.all(
+          color: colorScheme.outline.withOpacity(0.2),
+          width: 1,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -646,10 +793,19 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
           SizedBox(height: 8.h),
           Text(
             title,
-            style: AppTextStyles.caption().copyWith(color: colorScheme.onSurface.withOpacity(0.7), fontSize: 12.sp),
+            style: AppTextStyles.caption().copyWith(
+              color: colorScheme.onSurface.withOpacity(0.7),
+              fontSize: 12.sp,
+            ),
           ),
           SizedBox(height: 2.h),
-          Text(value, style: AppTextStyles.body().copyWith(fontWeight: FontWeight.w700, fontSize: 16.sp)),
+          Text(
+            value,
+            style: AppTextStyles.body().copyWith(
+              fontWeight: FontWeight.w700,
+              fontSize: 16.sp,
+            ),
+          ),
         ],
       ),
     );
@@ -663,11 +819,15 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
           child: ElevatedButton.icon(
             onPressed: () {
               if (_isLoading) return;
-              _playerController.value.isPlaying ? _playerController.pause() : _playerController.play();
+              _playerController.value.isPlaying
+                  ? _playerController.pause()
+                  : _playerController.play();
               setState(() => _showControls = true);
             },
             icon: Icon(
-              _playerController.value.isPlaying ? Icons.pause : Icons.play_arrow,
+              _playerController.value.isPlaying
+                  ? Icons.pause
+                  : Icons.play_arrow,
               size: 22.sp,
               color: AppColors.white,
             ),
@@ -679,7 +839,9 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
               backgroundColor: AppColors.primaryColor,
               foregroundColor: Colors.white,
               padding: EdgeInsets.symmetric(vertical: 16.h),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14.r)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14.r),
+              ),
               elevation: 3,
             ),
           ),
@@ -688,7 +850,8 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
         _buildActionButton(
           icon: Icons.replay_10,
           onPressed: () {
-            Duration newPosition = _currentPosition - const Duration(seconds: 10);
+            Duration newPosition =
+                _currentPosition - const Duration(seconds: 10);
             if (newPosition < Duration.zero) newPosition = Duration.zero;
             _playerController.seekTo(newPosition);
           },
@@ -698,7 +861,8 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
         _buildActionButton(
           icon: Icons.forward_10,
           onPressed: () {
-            Duration newPosition = _currentPosition + const Duration(seconds: 10);
+            Duration newPosition =
+                _currentPosition + const Duration(seconds: 10);
             if (newPosition < _totalDuration) {
               _playerController.seekTo(newPosition);
             }
@@ -735,17 +899,26 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
   }
 
   Widget _buildAdditionalInfo(Video video, ColorScheme colorScheme) {
+    final isQuizCompleted =
+        _videoController.videoDetailsModel.value?.data?.isQuizCompleted;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Quiz Section',
-          style: AppTextStyles.headlineMedium().copyWith(fontSize: 20.sp, fontWeight: FontWeight.w700),
+          style: AppTextStyles.headlineMedium().copyWith(
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w700,
+          ),
         ),
         SizedBox(height: 16.h),
         InkWell(
           onTap: () {
-            Get.to(QuizView(videoId: video.videoId));
+            if (isQuizCompleted == true) {
+              _videoController.showQuizResultDialog(Get.context!, _videoController.quizResultModel.value);
+            } else {
+              Get.to(QuizView(videoId: video.videoId));
+            }
           },
           borderRadius: BorderRadius.circular(10.r),
           child: Container(
@@ -759,8 +932,12 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
               color: AppColors.accentColor.withValues(alpha: 0.2),
             ),
             child: Text(
-              "Start Quiz",
-              style: TextStyle(color: AppColors.black, fontSize: 18.sp, fontWeight: FontWeight.w600),
+              isQuizCompleted == false ? "Start Quiz" : "Complete Quiz",
+              style: TextStyle(
+                color: AppColors.white,
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ),
@@ -788,7 +965,12 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
               ),
             ),
             SizedBox(height: 20.h),
-            Text('Video Options', style: AppTextStyles.headlineMedium().copyWith(fontWeight: FontWeight.w700)),
+            Text(
+              'Video Options',
+              style: AppTextStyles.headlineMedium().copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             SizedBox(height: 20.h),
             _buildOptionTile(Icons.speed, 'Playback Speed', () {}),
             _buildOptionTile(Icons.hd, 'Video Quality', () {}),
@@ -816,7 +998,9 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
       context: context,
       builder:
           (context) => Dialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -837,9 +1021,18 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                   const SizedBox(height: 16),
 
                   // Results
-                  _buildResultRow("attempted".tr, quizResult?.attempted?.toString() ?? "0"),
-                  _buildResultRow("correct".tr, quizResult?.correct?.toString() ?? "0"),
-                  _buildResultRow("accuracy".tr, "${quizResult?.accuracyPercentage?.toStringAsFixed(2) ?? "0"}%"),
+                  _buildResultRow(
+                    "attempted".tr,
+                    quizResult?.attempted?.toString() ?? "0",
+                  ),
+                  _buildResultRow(
+                    "correct".tr,
+                    quizResult?.correct?.toString() ?? "0",
+                  ),
+                  _buildResultRow(
+                    "accuracy".tr,
+                    "${quizResult?.accuracyPercentage?.toStringAsFixed(2) ?? "0"}%",
+                  ),
 
                   const SizedBox(height: 20),
 
@@ -851,7 +1044,9 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryColor,
                         foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                       child: Text("ok".tr),
                     ),
@@ -872,7 +1067,10 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
           Text(label, style: AppTextStyles.body()),
           Text(
             value,
-            style: AppTextStyles.body().copyWith(fontWeight: FontWeight.bold, color: AppColors.sucessPrimary),
+            style: AppTextStyles.body().copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppColors.sucessPrimary,
+            ),
           ),
         ],
       ),

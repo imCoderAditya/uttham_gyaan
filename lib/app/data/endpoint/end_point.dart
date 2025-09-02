@@ -18,4 +18,6 @@ class EndPoint {
   static const commissionsAPI = "$baseurl/success/commissions";
   static const profileAPI = "$baseurl/users";
   static const userVideoProgress = "$baseurl/UserVideoProgress/save";
+  static const paymentsOrder = "$baseurl/payments/order";
+  static const paymentStatusUpdate = "$baseurl/payments/updatestatus";
 }
