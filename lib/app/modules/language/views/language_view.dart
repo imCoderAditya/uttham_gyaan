@@ -111,8 +111,8 @@ class _LanguageSelectionPageState extends State<LanguageView> with TickerProvide
       final language = languages.firstWhere((lang) => lang.languageCode == selectedLanguage);
       Get.updateLocale(Locale(language.languageCode, language.countryCode));
 
-      final languageTitle = language.titleKey.tr;
-      final snackbarMessage = 'snackbar_message_template'.trParams({'lang': languageTitle});
+      // final languageTitle = language.titleKey.tr;
+      // final snackbarMessage = 'snackbar_message_template'.trParams({'lang': languageTitle});
 
       Get.offAllNamed(Routes.LOGIN);
       // Get.snackbar(

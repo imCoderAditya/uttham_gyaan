@@ -15,6 +15,7 @@ abstract class Routes {
   static const LANGUAGE = _Paths.LANGUAGE;
   static const SPLASH = _Paths.SPLASH;
   static const QUIZ = _Paths.QUIZ;
+  static const ADD_BANK = _Paths.ADD_BANK;
 }
 
 abstract class _Paths {
@@ -31,4 +32,5 @@ abstract class _Paths {
   static const LANGUAGE = '/language';
   static const SPLASH = '/splash';
   static const QUIZ = '/quiz';
+  static const ADD_BANK = '/add-bank';
 }

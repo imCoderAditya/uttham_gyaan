@@ -79,7 +79,7 @@ class CourseDetailsController extends GetxController {
     );
     try {
       razorpayService?.openCheckout(
-        amountInRupees: 1 ?? 0,
+        amountInRupees: 1 ,
         name: name ?? "",
         description: "Payment",
         contact: profileController.profileModel.value?.data?.phone,
