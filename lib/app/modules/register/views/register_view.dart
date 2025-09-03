@@ -14,7 +14,6 @@ class RegisterView extends GetView<RegisterController> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: CustomScrollView(
@@ -24,7 +23,10 @@ class RegisterView extends GetView<RegisterController> {
             child: Container(
               decoration: BoxDecoration(
                 color: theme.scaffoldBackgroundColor,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(32.r), topRight: Radius.circular(32.r)),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(32.r),
+                  topRight: Radius.circular(32.r),
+                ),
               ),
               child: Padding(
                 padding: EdgeInsets.fromLTRB(24.w, 32.h, 24.w, 24.h),
@@ -39,7 +41,9 @@ class RegisterView extends GetView<RegisterController> {
                         controller: controller.fullNameController,
                         label: 'full_name'.tr,
                         icon: Icons.person_outline_rounded,
-                        validator: (value) => value!.isEmpty ? 'enter_your_name'.tr : null,
+                        validator:
+                            (value) =>
+                                value!.isEmpty ? 'enter_your_name'.tr : null,
                       ),
                       SizedBox(height: 20.h),
                       _buildAnimatedTextField(
@@ -49,7 +53,9 @@ class RegisterView extends GetView<RegisterController> {
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value!.isEmpty) return 'enter_your_email'.tr;
-                          if (!GetUtils.isEmail(value)) return 'enter_a_valid_email'.tr;
+                          if (!GetUtils.isEmail(value)) {
+                            return 'enter_a_valid_email'.tr;
+                          }
                           return null;
                         },
                       ),
@@ -57,11 +63,16 @@ class RegisterView extends GetView<RegisterController> {
                       _buildAnimatedTextField(
                         controller: controller.phoneController,
                         label: 'phone'.tr,
+                        maxLength: 10,
                         icon: Icons.phone_outlined,
                         keyboardType: TextInputType.phone,
                         validator: (value) {
-                          if (value!.isEmpty) return 'enter_your_phone_number'.tr;
-                          if (!GetUtils.isPhoneNumber(value)) return 'enter_a_valid_phone_number'.tr;
+                          if (value!.isEmpty) {
+                            return 'enter_your_phone_number'.tr;
+                          }
+                          if (!GetUtils.isPhoneNumber(value)) {
+                            return 'enter_a_valid_phone_number'.tr;
+                          }
                           return null;
                         },
                       ),
@@ -73,7 +84,9 @@ class RegisterView extends GetView<RegisterController> {
                         obscureText: false,
                         validator: (value) {
                           if (value!.isEmpty) return 'enter_a_password'.tr;
-                          if (value.length < 6) return 'password_must_be_at_least_6_characters'.tr;
+                          if (value.length < 6) {
+                            return 'password_must_be_at_least_6_characters'.tr;
+                          }
                           return null;
                         },
                       ),
@@ -91,7 +104,10 @@ class RegisterView extends GetView<RegisterController> {
                         () =>
                             controller.isLoading.value
                                 ? _buildLoadingButton(context)
-                                : _buildEnhancedRegisterButton(context, controller),
+                                : _buildEnhancedRegisterButton(
+                                  context,
+                                  controller,
+                                ),
                       ),
                       SizedBox(height: 24.h),
                       _buildFooterText(context),
@@ -131,7 +147,10 @@ class RegisterView extends GetView<RegisterController> {
                 child: Container(
                   width: 150.w,
                   height: 150.h,
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white.withOpacity(0.1)),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withOpacity(0.1),
+                  ),
                 ),
               ),
               Positioned(
@@ -140,7 +159,10 @@ class RegisterView extends GetView<RegisterController> {
                 child: Container(
                   width: 100.w,
                   height: 100.h,
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white.withOpacity(0.05)),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withOpacity(0.05),
+                  ),
                 ),
               ),
               Center(
@@ -153,9 +175,16 @@ class RegisterView extends GetView<RegisterController> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white.withOpacity(0.2),
-                        border: Border.all(color: Colors.white.withOpacity(0.3), width: 2.w),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.3),
+                          width: 2.w,
+                        ),
                       ),
-                      child: Icon(Icons.person_add_rounded, size: 40.sp, color: AppColors.white),
+                      child: Icon(
+                        Icons.person_add_rounded,
+                        size: 40.sp,
+                        color: AppColors.white,
+                      ),
                     ),
                     SizedBox(height: 16.h),
                     Text(
@@ -212,7 +241,10 @@ class RegisterView extends GetView<RegisterController> {
                 SizedBox(height: 4.h),
                 Text(
                   'fill_in_your_details_to_get_started'.tr,
-                  style: AppTextStyles.body().copyWith(fontSize: 14.sp, color: colorScheme.onSurfaceVariant),
+                  style: AppTextStyles.body().copyWith(
+                    fontSize: 14.sp,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),
@@ -226,6 +258,7 @@ class RegisterView extends GetView<RegisterController> {
     required TextEditingController controller,
     required String label,
     required IconData icon,
+    int? maxLength,
     bool obscureText = false,
     TextInputType? keyboardType,
     String? Function(String?)? validator,
@@ -238,10 +271,16 @@ class RegisterView extends GetView<RegisterController> {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: colorScheme.outline.withOpacity(0.1), width: 1.w),
+        border: Border.all(
+          color: colorScheme.outline.withOpacity(0.1),
+          width: 1.w,
+        ),
         boxShadow: [
           BoxShadow(
-            color: isDark ? Colors.black.withOpacity(0.2) : colorScheme.primary.withOpacity(0.05),
+            color:
+                isDark
+                    ? Colors.black.withOpacity(0.2)
+                    : colorScheme.primary.withOpacity(0.05),
             blurRadius: 20.r,
             offset: Offset(0, 8.h),
             spreadRadius: 0,
@@ -252,6 +291,14 @@ class RegisterView extends GetView<RegisterController> {
         controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
+        buildCounter:
+            (
+              context, {
+              required currentLength,
+              required isFocused,
+              required maxLength,
+            }) => SizedBox(),
+        maxLength: maxLength,
         style: AppTextStyles.body().copyWith(
           fontSize: 16.sp,
           color: colorScheme.onSurface,
@@ -259,13 +306,19 @@ class RegisterView extends GetView<RegisterController> {
         ),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: AppTextStyles.caption().copyWith(fontSize: 14.sp, color: colorScheme.onSurfaceVariant),
+          labelStyle: AppTextStyles.caption().copyWith(
+            fontSize: 14.sp,
+            color: colorScheme.onSurfaceVariant,
+          ),
           prefixIcon: Container(
             margin: EdgeInsets.only(left: 16.w, right: 12.w),
             child: Icon(icon, size: 24.sp, color: colorScheme.primary),
           ),
           prefixIconConstraints: BoxConstraints(minWidth: 52.w),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.r), borderSide: BorderSide.none),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.r),
+            borderSide: BorderSide.none,
+          ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16.r),
             borderSide: BorderSide(color: colorScheme.primary, width: 2.w),
@@ -274,7 +327,10 @@ class RegisterView extends GetView<RegisterController> {
             borderRadius: BorderRadius.circular(16.r),
             borderSide: BorderSide(color: colorScheme.error, width: 2.w),
           ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 20.w,
+            vertical: 20.h,
+          ),
           filled: true,
           fillColor: Colors.transparent,
         ),
@@ -283,7 +339,10 @@ class RegisterView extends GetView<RegisterController> {
     );
   }
 
-  Widget _buildEnhancedDropdownField(BuildContext context, RegisterController controller) {
+  Widget _buildEnhancedDropdownField(
+    BuildContext context,
+    RegisterController controller,
+  ) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
@@ -295,10 +354,16 @@ class RegisterView extends GetView<RegisterController> {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: colorScheme.outline.withOpacity(0.1), width: 1.w),
+        border: Border.all(
+          color: colorScheme.outline.withOpacity(0.1),
+          width: 1.w,
+        ),
         boxShadow: [
           BoxShadow(
-            color: isDark ? Colors.black.withOpacity(0.2) : colorScheme.primary.withOpacity(0.05),
+            color:
+                isDark
+                    ? Colors.black.withOpacity(0.2)
+                    : colorScheme.primary.withOpacity(0.05),
             blurRadius: 20.r,
             offset: Offset(0, 8.h),
             spreadRadius: 0,
@@ -310,18 +375,31 @@ class RegisterView extends GetView<RegisterController> {
         value: controller.languagePreference.value,
         decoration: InputDecoration(
           labelText: 'language_preference'.tr,
-          labelStyle: AppTextStyles.caption().copyWith(fontSize: 14.sp, color: colorScheme.onSurfaceVariant),
+          labelStyle: AppTextStyles.caption().copyWith(
+            fontSize: 14.sp,
+            color: colorScheme.onSurfaceVariant,
+          ),
           prefixIcon: Container(
             margin: EdgeInsets.only(left: 16.w, right: 12.w),
-            child: Icon(Icons.language_outlined, size: 24.sp, color: colorScheme.primary),
+            child: Icon(
+              Icons.language_outlined,
+              size: 24.sp,
+              color: colorScheme.primary,
+            ),
           ),
           prefixIconConstraints: BoxConstraints(minWidth: 52.w),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.r), borderSide: BorderSide.none),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.r),
+            borderSide: BorderSide.none,
+          ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16.r),
             borderSide: BorderSide(color: colorScheme.primary, width: 2.w),
           ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 20.w,
+            vertical: 20.h,
+          ),
           filled: true,
           fillColor: Colors.transparent,
         ),
@@ -341,7 +419,10 @@ class RegisterView extends GetView<RegisterController> {
                 // The child displays the localized text for the key.
                 child: Text(
                   languageKey.tr,
-                  style: AppTextStyles.body().copyWith(fontSize: 16.sp, color: colorScheme.onSurface),
+                  style: AppTextStyles.body().copyWith(
+                    fontSize: 16.sp,
+                    color: colorScheme.onSurface,
+                  ),
                 ),
               );
             }).toList(),
@@ -350,7 +431,10 @@ class RegisterView extends GetView<RegisterController> {
     );
   }
 
-  Widget _buildEnhancedRegisterButton(BuildContext context, RegisterController controller) {
+  Widget _buildEnhancedRegisterButton(
+    BuildContext context,
+    RegisterController controller,
+  ) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -392,7 +476,11 @@ class RegisterView extends GetView<RegisterController> {
                   ),
                 ),
                 SizedBox(width: 12.w),
-                Icon(Icons.arrow_forward_rounded, color: AppColors.white, size: 20.sp),
+                Icon(
+                  Icons.arrow_forward_rounded,
+                  color: AppColors.white,
+                  size: 20.sp,
+                ),
               ],
             ),
           ),
@@ -410,7 +498,10 @@ class RegisterView extends GetView<RegisterController> {
       height: 56.h,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [colorScheme.primary.withOpacity(0.7), colorScheme.secondary.withOpacity(0.7)],
+          colors: [
+            colorScheme.primary.withOpacity(0.7),
+            colorScheme.secondary.withOpacity(0.7),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -452,7 +543,10 @@ class RegisterView extends GetView<RegisterController> {
         textAlign: TextAlign.center,
         text: TextSpan(
           text: 'agreement_prefix'.tr,
-          style: AppTextStyles.caption().copyWith(fontSize: 12.sp, color: colorScheme.onSurfaceVariant),
+          style: AppTextStyles.caption().copyWith(
+            fontSize: 12.sp,
+            color: colorScheme.onSurfaceVariant,
+          ),
           children: [
             TextSpan(
               text: 'terms_of_service'.tr,
@@ -464,7 +558,10 @@ class RegisterView extends GetView<RegisterController> {
             ),
             TextSpan(
               text: 'and'.tr,
-              style: AppTextStyles.caption().copyWith(fontSize: 12.sp, color: colorScheme.onSurfaceVariant),
+              style: AppTextStyles.caption().copyWith(
+                fontSize: 12.sp,
+                color: colorScheme.onSurfaceVariant,
+              ),
             ),
             TextSpan(
               text: 'privacy_policy'.tr,

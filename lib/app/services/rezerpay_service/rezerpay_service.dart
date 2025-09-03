@@ -29,7 +29,6 @@ class RazorPayService {
 
   /// Open Razorpay Checkout
   void openCheckout({
-    required String key,
     required double amountInRupees, // accept in ₹ for clarity
     required String name,
     String description = "",
@@ -40,7 +39,7 @@ class RazorPayService {
         (amountInRupees * 100).toInt(); // ✅ safer conversion
 
     var options = {
-      'key': key,
+      'key': "rzp_live_RAhdFjSs3ekRw0",
       'amount': amountInPaise,
       'name': name,
       'description': description,

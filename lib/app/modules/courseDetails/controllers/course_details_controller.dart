@@ -62,12 +62,15 @@ class CourseDetailsController extends GetxController {
     razorpayService = RazorPayService(
       onPaymentSuccess: (PaymentSuccessResponse response) {
         log("✅ Payment Success: $response");
-        paymentStatusUpdate(paymentID: paymentID, status: "Success");
+        paymentStatusUpdate(
+          paymentID: paymentID,
+          transactionID: response.paymentId,
+        );
         // handle success (maybe call your backend to verify)
       },
       onPaymentError: (PaymentFailureResponse response) {
         log("❌ Payment Failed: ${response.code} - ${response.message}");
-        paymentStatusUpdate(paymentID: paymentID, status: "Success");
+        paymentStatusUpdate(paymentID: paymentID, transactionID: "");
         // show error to user
       },
       onExternalWallet: (ExternalWalletResponse response) {
@@ -76,8 +79,7 @@ class CourseDetailsController extends GetxController {
     );
     try {
       razorpayService?.openCheckout(
-        key: "rzp_live_RAhdFjSs3ekRw0",
-        amountInRupees: amount ?? 0,
+        amountInRupees: 1 ?? 0,
         name: name ?? "",
         description: "Payment",
         contact: profileController.profileModel.value?.data?.phone,
@@ -134,12 +136,15 @@ class CourseDetailsController extends GetxController {
     }
   }
 
-  Future<void> paymentStatusUpdate({int? paymentID, String? status}) async {
+  Future<void> paymentStatusUpdate({
+    int? paymentID,
+    String? transactionID,
+  }) async {
     GlobalLoader.show();
     try {
       final res = await BaseClient.post(
         api: EndPoint.paymentStatusUpdate,
-        data: {"PaymentID": paymentID, "Status": status},
+        data: {"PaymentID": paymentID, "TransactionID": transactionID},
       );
 
       if (res != null && res.statusCode == 200) {

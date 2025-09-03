@@ -29,7 +29,7 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
 
   // Loading state
   final isLoading = true.obs;
-  final loadingText = 'Loading...'.obs;
+  final loadingText = "loading_text".obs;
 
   @override
   void onInit() {
@@ -103,13 +103,13 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
   void _updateLoadingText() {
     Future.delayed(const Duration(milliseconds: 1000), () {
       if (isLoading.value) {
-        loadingText.value = 'Initializing...';
+        loadingText.value = 'initializing'.tr;
       }
     });
 
     Future.delayed(const Duration(milliseconds: 2000), () {
       if (isLoading.value) {
-        loadingText.value = 'Almost ready...';
+        loadingText.value = 'almost_ready'.tr;
       }
     });
   }

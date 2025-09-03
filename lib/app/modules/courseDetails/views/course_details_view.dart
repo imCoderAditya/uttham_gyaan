@@ -129,9 +129,7 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                 ),
                 child: IconButton(
                   icon: Icon(Icons.share, color: AppColors.white),
-                  onPressed: () {
-                    // TODO: Implement share functionality
-                  },
+                  onPressed: () {},
                 ),
               ),
             ],

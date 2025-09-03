@@ -1,4 +1,6 @@
 // splash_view.dart
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -158,7 +160,7 @@ class SplashView extends GetView<SplashController> {
                     end: Alignment.bottomRight,
                   ).createShader(bounds),
               child: Text(
-                'Uttham Gyaan',
+                'utthamgyaan'.tr,
                 style:
                     AppTextStyles.headlineLarge.call().copyWith(
                       fontSize: 42.sp,
@@ -190,7 +192,7 @@ class SplashView extends GetView<SplashController> {
       child: FadeTransition(
         opacity: controller.textOpacityAnimation,
         child: Text(
-          'Excellence in Education',
+          'excellence_in_education'.tr,
           style:
               AppTextStyles.body.call().copyWith(
                 fontSize: 16.sp,

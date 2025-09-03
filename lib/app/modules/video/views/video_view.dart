@@ -10,7 +10,6 @@ import 'package:uttham_gyaan/app/data/model/quiz/quiz_result_model.dart';
 import 'package:uttham_gyaan/app/data/model/video/video_details_model.dart';
 import 'package:uttham_gyaan/app/modules/quiz/views/quiz_view.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
 import '../controllers/video_controller.dart';
 
 class VideoView extends StatefulWidget {
@@ -260,7 +259,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
       ),
       centerTitle: true,
       title: Text(
-        'Video Player',
+        'video_player'.tr,
         style: AppTextStyles.headlineMedium().copyWith(
           color: AppColors.white,
           fontSize: 18.sp,
@@ -320,7 +319,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
               ),
               SizedBox(height: 24.h),
               Text(
-                'Loading Video...',
+                'loading_video'.tr,
                 style: AppTextStyles.headlineMedium().copyWith(
                   color: AppColors.white,
                   fontWeight: FontWeight.w600,
@@ -362,14 +361,14 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
             ),
             SizedBox(height: 24.h),
             Text(
-              'Failed to Load Video',
+              "failed_to_load_video".tr,
               style: AppTextStyles.headlineMedium().copyWith(
                 fontWeight: FontWeight.w600,
               ),
             ),
             SizedBox(height: 12.h),
             Text(
-              'Please check your connection and try again',
+              'check_connection_try_again'.tr,
               style: AppTextStyles.body().copyWith(
                 color: theme.colorScheme.onSurface.withOpacity(0.7),
               ),
@@ -386,7 +385,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                   borderRadius: BorderRadius.circular(12.r),
                 ),
               ),
-              child: Text('Go Back'),
+              child: Text('go_back'.tr),
             ),
           ],
         ),
@@ -409,7 +408,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
         const SizedBox(width: 8.0),
         Expanded(
           child: Text(
-            video.title ?? 'Video Title',
+            video.title ?? 'video_title'.tr,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 16.0,
@@ -496,7 +495,12 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                     ? SizedBox(height: 40.h)
                     : SizedBox(),
                 (progress.isCompleted == true)
-                    ? (_videoController.videoDetailsModel.value?.data?.isQuizCompleted==false) 
+                    ? (_videoController
+                                .videoDetailsModel
+                                .value
+                                ?.data
+                                ?.isQuizCompleted ==
+                            false)
                         ? _buildAdditionalInfo(
                           video,
                           colorScheme,
@@ -505,10 +509,26 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                           padding: const EdgeInsets.only(top: 30.0),
                           child: MaterialButton(
                             minWidth: double.infinity,
-                            onPressed: () {
+                            onPressed: () async {
+                              await _videoController.getQuizResult(
+                                videoId: video.videoId,
+                              );
                               showQuizResultDialog(
                                 context,
-                                _videoController.quizResultModel.value?.data?.firstOrNull,
+                                _videoController
+                                    .quizResultModel
+                                    .value
+                                    ?.data
+                                    ?.firstOrNull,
+                              );
+
+                              debugPrint(
+                                _videoController
+                                    .quizResultModel
+                                    .value
+                                    ?.data
+                                    ?.firstOrNull
+                                    .toString(),
                               );
                             },
                             color: AppColors.primaryColor,
@@ -522,7 +542,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                             ),
                             splashColor: Colors.white.withOpacity(0.2),
                             child: Text(
-                              "retake_quiz".tr,
+                              "complete_quiz".tr,
                               style: AppTextStyles.body().copyWith(
                                 color: AppColors.white,
                                 fontWeight: FontWeight.bold,
@@ -587,7 +607,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
             borderRadius: BorderRadius.circular(12.r),
           ),
           child: Icon(
-            Icons.share_outlined,
+            Icons.face,
             size: 18.sp,
             color: colorScheme.onSecondaryContainer,
           ),
@@ -598,7 +618,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
 
   Widget _buildVideoTitle(video) {
     return Text(
-      video.title ?? 'Video Title',
+      video.title ?? '',
       style: AppTextStyles.headlineLarge().copyWith(
         fontSize: 28.sp,
         fontWeight: FontWeight.bold,
@@ -647,7 +667,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                   ),
                   SizedBox(width: 8.w),
                   Text(
-                    'Your Progress',
+                    'your_progress'.tr,
                     style: AppTextStyles.body().copyWith(
                       fontWeight: FontWeight.w700,
                       fontSize: 17.sp,
@@ -665,7 +685,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                   borderRadius: BorderRadius.circular(14.r),
                 ),
                 child: Text(
-                  isCompleted ? 'Completed' : 'In Progress',
+                  isCompleted ? 'completed'.tr : 'in_progress'.tr,
                   style: AppTextStyles.caption().copyWith(
                     color:
                         isCompleted
@@ -726,7 +746,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${completionPercentage.toStringAsFixed(1)}% Complete',
+                '${completionPercentage.toStringAsFixed(1)}% ${"complete".tr}',
                 style: AppTextStyles.caption().copyWith(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w600,
@@ -752,8 +772,8 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
         Expanded(
           child: _buildStatCard(
             icon: Icons.access_time_rounded,
-            title: 'Duration',
-            value: '${video.durationMinutes ?? 0} min',
+            title: 'duration'.tr,
+            value: '${video.durationMinutes ?? 0} ${"min".tr}',
             colorScheme: colorScheme,
           ),
         ),
@@ -761,7 +781,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
         Expanded(
           child: _buildStatCard(
             icon: Icons.playlist_play_rounded,
-            title: 'Lesson',
+            title: 'lesson'.tr,
             value: '#${video.sequenceOrder ?? 1}',
             colorScheme: colorScheme,
           ),
@@ -832,7 +852,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
               color: AppColors.white,
             ),
             label: Text(
-              _playerController.value.isPlaying ? 'Pause' : 'Play',
+              _playerController.value.isPlaying ? 'pause'.tr : 'play'.tr,
               style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
             ),
             style: ElevatedButton.styleFrom(
@@ -899,13 +919,11 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
   }
 
   Widget _buildAdditionalInfo(Video video, ColorScheme colorScheme) {
-    final isQuizCompleted =
-        _videoController.videoDetailsModel.value?.data?.isQuizCompleted;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Quiz Section',
+          'quiz_section'.tr,
           style: AppTextStyles.headlineMedium().copyWith(
             fontSize: 20.sp,
             fontWeight: FontWeight.w700,
@@ -914,15 +932,13 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
         SizedBox(height: 16.h),
         InkWell(
           onTap: () async {
-           
-              Get.to(QuizView(videoId: video.videoId));
-          
+            Get.to(QuizView(videoId: video.videoId));
           },
           borderRadius: BorderRadius.circular(10.r),
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16.h),
             width: double.infinity,
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.center,
             height: 55.h,
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.accentColor),
@@ -930,9 +946,9 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
               color: AppColors.accentColor.withValues(alpha: 0.2),
             ),
             child: Text(
-              isQuizCompleted == false ? "Start Quiz" : "Complete Quiz",
+              "start_quiz".tr,
               style: TextStyle(
-                color: AppColors.white,
+                color: AppColors.accentColor,
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
               ),
@@ -964,16 +980,16 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
             ),
             SizedBox(height: 20.h),
             Text(
-              'Video Options',
+              'video_options'.tr,
               style: AppTextStyles.headlineMedium().copyWith(
                 fontWeight: FontWeight.w700,
               ),
             ),
             SizedBox(height: 20.h),
-            _buildOptionTile(Icons.speed, 'Playback Speed', () {}),
-            _buildOptionTile(Icons.hd, 'Video Quality', () {}),
-            _buildOptionTile(Icons.closed_caption, 'Captions', () {}),
-            _buildOptionTile(Icons.report, 'Report Issue', () {}),
+            _buildOptionTile(Icons.speed, 'playback_speed'.tr, () {}),
+            _buildOptionTile(Icons.hd, 'video_quality'.tr, () {}),
+            _buildOptionTile(Icons.closed_caption, 'captions'.tr, () {}),
+            _buildOptionTile(Icons.report, 'report_issue'.tr, () {}),
             SizedBox(height: 20.h),
           ],
         ),
