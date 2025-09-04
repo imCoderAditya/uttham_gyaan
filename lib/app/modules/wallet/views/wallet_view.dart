@@ -11,6 +11,7 @@ import 'package:uttham_gyaan/app/services/storage/local_storage_service.dart';
 import 'package:uttham_gyaan/components/app_drawer.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../Bank/components/commision_screen.dart';
 import '../../Bank/views/bank_view.dart';
 import '../controllers/wallet_controller.dart';
 
@@ -157,6 +158,7 @@ class WalletView extends GetView<WalletController> {
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Icon(
+
                   Icons.account_balance_wallet,
                   color: Colors.white,
                   size: 20.sp,
@@ -174,11 +176,17 @@ class WalletView extends GetView<WalletController> {
             ),
           ),
           SizedBox(height: 8.h),
-          Text(
-            'available_commission'.tr,
-            style: AppTextStyles.caption().copyWith(
-              color: Colors.white.withOpacity(0.8),
-              fontSize: 14.sp,
+          GestureDetector(
+            onTap: (){
+              Get.to(CommissionsScreen());
+
+            },
+            child: Text(
+              'available_commission'.tr,
+              style: AppTextStyles.caption().copyWith(
+                color: Colors.white.withOpacity(0.8),
+                fontSize: 14.sp,
+              ),
             ),
           ),
         ],

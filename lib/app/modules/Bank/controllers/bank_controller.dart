@@ -8,6 +8,7 @@ import 'package:uttham_gyaan/app/services/storage/local_storage_service.dart';
 import '../../../data/baseclient/base_client.dart';
 import '../../../data/endpoint/end_point.dart';
 import '../../../data/model/bank/bank_model.dart';
+import '../../../data/model/commissions/commissions_model.dart';
 
 class BankController extends GetxController {
 
@@ -26,6 +27,41 @@ class BankController extends GetxController {
   final RxString paytm = ''.obs;
   final RxInt Bankid = 0.obs;
 
+
+  var commissionResponse = CommissionResponse(status: false, totalSuccessAmount: 0.0, commissions: []).obs;
+  var filteredCommissions = <Commission>[].obs;
+  var errorMessage = ''.obs;
+  var sortBy = 'none'.obs; // none, amount, date
+  var filterStatus = 'all'.obs;
+
+
+  void applyFiltersAndSort() {
+    var commissions = commissionResponse.value.commissions;
+
+    // Apply status filter
+    if (filterStatus.value != 'all') {
+      commissions = commissions.where((c) => c.status == filterStatus.value).toList();
+    }
+
+    // Apply sorting
+    if (sortBy.value == 'amount') {
+      commissions.sort((a, b) => b.amount.compareTo(a.amount));
+    } else if (sortBy.value == 'date') {
+      commissions.sort((a, b) => DateTime.parse(b.generatedDate).compareTo(DateTime.parse(a.generatedDate)));
+    }
+
+    filteredCommissions.assignAll(commissions);
+  }
+
+  void setFilter(String status) {
+    filterStatus(status);
+    applyFiltersAndSort();
+  }
+
+  void setSort(String sort) {
+    sortBy(sort);
+    applyFiltersAndSort();
+  }
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   void init(BankModel? existing, int currentUserId) {
     userId = userId;
@@ -54,6 +90,7 @@ class BankController extends GetxController {
   void onInit() {
     super.onInit();
     fetchBank();
+    fetchCommissions();
   }
 
   Future<void> fetchBank() async {
@@ -120,7 +157,38 @@ class BankController extends GetxController {
       isLoading.value = false;
     }
   }
+  Future<void> fetchCommissions() async {
+    try {
+      if (userId == null) {
+        error.value = 'user_id_missing'.tr;
+        isLoading.value = false;
+        Get.snackbar('error'.tr, error.value);
+        return;
+      }
+      isLoading.value = true;
+      error.value = '';
+      final response = await BaseClient.get(
+        api: "${EndPoint.getCommissions}?userId=1",
+      );
 
+      if (response?.statusCode == 200) {
+        final responseData = response?.data as Map<String, dynamic>?;
+        if (responseData != null) {
+          commissionResponse.value = CommissionResponse.fromJson(responseData);
+          applyFiltersAndSort(); // Update filtered commissions after fetching
+        } else {
+          throw Exception('Response data is null');
+        }
+      } else {
+        throw Exception('Failed to load commissions: ${response?.statusCode}');
+      }
+    } catch (e) {
+      error.value = 'Error fetching commissions: $e';
+      Get.snackbar('error'.tr, error.value);
+    } finally {
+      isLoading.value = false;
+    }
+  }
   Future<void> submit() async {
     if (formKey.currentState!.validate()) {
       final model = BankModel(
