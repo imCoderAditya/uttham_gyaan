@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
 
-import '../modules/addBank/bindings/add_bank_binding.dart';
-import '../modules/addBank/views/add_bank_view.dart';
+
+import '../modules/Bank/bindings/bank_binding.dart';
+import '../modules/Bank/views/bank_view.dart';
 import '../modules/courseDetails/bindings/course_details_binding.dart';
 import '../modules/courseDetails/views/course_details_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -84,9 +85,9 @@ class AppPages {
         page: () => const QuizView(),
         binding: QuizBinding()),
     GetPage(
-      name: _Paths.ADD_BANK,
-      page: () => const AddBankView(),
-      binding: AddBankBinding(),
+      name: _Paths.BANK,
+      page: () => const BankView(),
+      binding: BankBinding(),
     ),
   ];
 }

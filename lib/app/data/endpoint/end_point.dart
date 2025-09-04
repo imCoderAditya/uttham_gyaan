@@ -20,4 +20,6 @@ class EndPoint {
   static const userVideoProgress = "$baseurl/UserVideoProgress/save";
   static const paymentsOrder = "$baseurl/payments/order";
   static const paymentStatusUpdate = "$baseurl/payments/updatestatus";
+  static const Addbank = "$baseurl/bankdetails/addorupdate";
+  static const getbank = "$baseurl/bankdetails/get";
 }

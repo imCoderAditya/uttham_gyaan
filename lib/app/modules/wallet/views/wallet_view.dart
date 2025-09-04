@@ -10,6 +10,8 @@ import 'package:uttham_gyaan/app/data/model/wallet/wallet_model.dart';
 import 'package:uttham_gyaan/app/services/storage/local_storage_service.dart';
 import 'package:uttham_gyaan/components/app_drawer.dart';
 
+import '../../../routes/app_pages.dart';
+import '../../Bank/views/bank_view.dart';
 import '../controllers/wallet_controller.dart';
 
 class WalletView extends GetView<WalletController> {
@@ -86,6 +88,15 @@ class WalletView extends GetView<WalletController> {
         'my_wallet'.tr,
         style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white),
       ),
+      actions: [
+        TextButton(
+          onPressed:(){
+      Get.to(BankView());
+    },
+          child: Icon( Icons.add ,size: 40,),
+        ),
+
+      ],
     );
   }
 
