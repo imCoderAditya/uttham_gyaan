@@ -7,6 +7,7 @@ import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
 import 'package:uttham_gyaan/app/core/config/theme/theme_controller.dart';
 import 'package:uttham_gyaan/app/core/contants/constant.dart';
+import 'package:uttham_gyaan/app/modules/Bank/components/commision_screen.dart';
 import 'package:uttham_gyaan/app/modules/mycourse/views/mycourse_view.dart';
 import 'package:uttham_gyaan/app/modules/profile/controllers/profile_controller.dart';
 import 'package:uttham_gyaan/app/routes/app_pages.dart';
@@ -50,9 +51,18 @@ class AppDrawer extends StatelessWidget {
                   context,
                   icon: Icons.bookmark_rounded,
                   title: 'my_courses'.tr,
-                  onTap: () => {Get.back(), Get.to(MycourseView(isMenuDisable: true,))},
+                  onTap:
+                      () => {
+                        Get.back(),
+                        Get.to(MycourseView(isMenuDisable: true)),
+                      },
                 ),
-                // _buildMenuItem(context, icon: Icons.download_rounded, title: 'downloads'.tr, onTap: () => Get.back()),
+                _buildMenuItem(
+                  context,
+                  icon: Icons.download_rounded,
+                  title: 'available_commission'.tr,
+                  onTap: () => {Get.back(), Get.to(CommissionsScreen())},
+                ),
                 // _buildMenuItem(context, icon: Icons.favorite_rounded, title: 'favorites'.tr, onTap: () => Get.back()),
                 _buildMenuItem(
                   context,
@@ -201,7 +211,7 @@ class AppDrawer extends StatelessWidget {
 
                   // User Name
                   Text(
-                    "${'welcome_'.tr} ${controller.profileModel.value?.data?.fullName ?? ""}",
+                    "${'welcome'.tr} ${controller.profileModel.value?.data?.fullName?.capitalize ?? ""}",
                     style: AppTextStyles.headlineMedium().copyWith(
                       color: AppColors.white,
                       fontSize: 20.sp,

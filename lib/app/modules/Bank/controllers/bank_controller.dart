@@ -1,19 +1,17 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uttham_gyaan/app/modules/Bank/components/add_bank.dart';
 import 'package:uttham_gyaan/app/services/storage/local_storage_service.dart';
-
+import 'package:uttham_gyaan/components/Snack_bar_view.dart';
+import 'package:uttham_gyaan/components/global_loader.dart';
 import '../../../data/baseclient/base_client.dart';
 import '../../../data/endpoint/end_point.dart';
 import '../../../data/model/bank/bank_model.dart';
 import '../../../data/model/commissions/commissions_model.dart';
 
 class BankController extends GetxController {
-
   final Rx<BankModel?> bank = Rx<BankModel?>(null);
-  String ? userId = LocalStorageService.getUserId();
+  String? userId = LocalStorageService.getUserId();
   final count = 0.obs;
   final RxString error = ''.obs;
   final RxBool isLoading = true.obs;
@@ -27,27 +25,35 @@ class BankController extends GetxController {
   final RxString paytm = ''.obs;
   final RxInt Bankid = 0.obs;
 
-
-  var commissionResponse = CommissionResponse(status: false, totalSuccessAmount: 0.0, commissions: []).obs;
+  var commissionResponse =
+      CommissionResponse(
+        status: false,
+        totalSuccessAmount: 0.0,
+        commissions: [],
+      ).obs;
   var filteredCommissions = <Commission>[].obs;
   var errorMessage = ''.obs;
   var sortBy = 'none'.obs; // none, amount, date
   var filterStatus = 'all'.obs;
-
 
   void applyFiltersAndSort() {
     var commissions = commissionResponse.value.commissions;
 
     // Apply status filter
     if (filterStatus.value != 'all') {
-      commissions = commissions.where((c) => c.status == filterStatus.value).toList();
+      commissions =
+          commissions.where((c) => c.status == filterStatus.value).toList();
     }
 
     // Apply sorting
     if (sortBy.value == 'amount') {
       commissions.sort((a, b) => b.amount.compareTo(a.amount));
     } else if (sortBy.value == 'date') {
-      commissions.sort((a, b) => DateTime.parse(b.generatedDate).compareTo(DateTime.parse(a.generatedDate)));
+      commissions.sort(
+        (a, b) => DateTime.parse(
+          b.generatedDate,
+        ).compareTo(DateTime.parse(a.generatedDate)),
+      );
     }
 
     filteredCommissions.assignAll(commissions);
@@ -62,6 +68,7 @@ class BankController extends GetxController {
     sortBy(sort);
     applyFiltersAndSort();
   }
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   void init(BankModel? existing, int currentUserId) {
     userId = userId;
@@ -86,6 +93,7 @@ class BankController extends GetxController {
       paytm.value = '';
     }
   }
+
   @override
   void onInit() {
     super.onInit();
@@ -94,6 +102,9 @@ class BankController extends GetxController {
   }
 
   Future<void> fetchBank() async {
+    Future.microtask(() {
+      GlobalLoader.show();
+    });
     if (userId == null) {
       error.value = 'user_id_missing'.tr;
       isLoading.value = false;
@@ -126,7 +137,9 @@ class BankController extends GetxController {
         bank.value = null;
         error.value = '${'failed_to_fetch'.tr}: ${response?.statusCode}';
       }
+      GlobalLoader.hide();
     } catch (e) {
+      GlobalLoader.hide();
       bank.value = null;
       error.value = '${'failed_to_fetch'.tr}: $e';
       Get.snackbar('error'.tr, error.value);
@@ -134,7 +147,9 @@ class BankController extends GetxController {
       isLoading.value = false;
     }
   }
+
   Future<void> addUpdate(BankModel model) async {
+    GlobalLoader.show();
     try {
       isLoading.value = true;
       error.value = '';
@@ -145,18 +160,22 @@ class BankController extends GetxController {
 
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         await fetchBank();
-        Get.snackbar('success'.tr, 'Bank details saved successfully'.tr);
+        GlobalLoader.hide();
+        SnackBarView.showError(message: 'Bank details saved successfully'.tr);
       } else {
         error.value = '${'failed_to_save'.tr}: ${response?.statusCode}';
-        Get.snackbar('error'.tr, error.value);
+        SnackBarView.showError(message: error.value);
+        GlobalLoader.hide();
       }
     } catch (e) {
       error.value = '${'failed_to_save'.tr}: $e';
-      Get.snackbar('error'.tr, error.value);
+      GlobalLoader.hide();
+      SnackBarView.showError(message: "Error:$e");
     } finally {
       isLoading.value = false;
     }
   }
+
   Future<void> fetchCommissions() async {
     try {
       if (userId == null) {
@@ -168,7 +187,7 @@ class BankController extends GetxController {
       isLoading.value = true;
       error.value = '';
       final response = await BaseClient.get(
-        api: "${EndPoint.getCommissions}?userId=1",
+        api: "${EndPoint.getCommissions}?userId=$userId",
       );
 
       if (response?.statusCode == 200) {
@@ -189,6 +208,7 @@ class BankController extends GetxController {
       isLoading.value = false;
     }
   }
+
   Future<void> submit() async {
     if (formKey.currentState!.validate()) {
       final model = BankModel(
@@ -200,19 +220,22 @@ class BankController extends GetxController {
         upiId: upiId.value,
         phonePe: phonePe.value,
         googlePay: googlePay.value,
-        paytm: paytm.value, bankDetailId: Bankid.value, createdDate: '', updatedDate: '',
+        paytm: paytm.value,
+        bankDetailId: Bankid.value,
+        createdDate: '',
+        updatedDate: '',
       );
       final bankCtrl = Get.find<BankController>();
       await bankCtrl.addUpdate(model);
       Get.back();
     }
   }
+
   void openDialog() {
     final addCtrl = Get.put(BankController());
     addCtrl.init(bank.value, int.parse(userId.toString()));
     Get.dialog(const AddBankView());
   }
-
 
   @override
   void onReady() {

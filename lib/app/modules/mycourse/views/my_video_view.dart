@@ -38,7 +38,10 @@ class MyVideoView extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context, MycourseController controller) {
+  PreferredSizeWidget _buildAppBar(
+    BuildContext context,
+    MycourseController controller,
+  ) {
     return AppBar(
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -51,7 +54,10 @@ class MyVideoView extends StatelessWidget {
           ),
         ),
       ),
-      title: Text('course_videos'.tr, style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white)),
+      title: Text(
+        'course_videos'.tr,
+        style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white),
+      ),
       actions: [
         // Container(
         //   margin: EdgeInsets.only(right: 16.w, bottom: 5.h),
@@ -65,7 +71,11 @@ class MyVideoView extends StatelessWidget {
     );
   }
 
-  Widget _buildVideoList(BuildContext context, List<CourseVideo> videos, MycourseController controller) {
+  Widget _buildVideoList(
+    BuildContext context,
+    List<CourseVideo> videos,
+    MycourseController controller,
+  ) {
     return CustomScrollView(
       slivers: [
         // Stats Header
@@ -92,33 +102,59 @@ class MyVideoView extends StatelessWidget {
   Widget _buildStatsHeader(BuildContext context, List<CourseVideo> videos) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final totalDuration = videos.fold<int>(0, (sum, video) => sum + (video.durationMinutes ?? 0));
+    final totalDuration = videos.fold<int>(
+      0,
+      (sum, video) => sum + (video.durationMinutes ?? 0),
+    );
 
     return Container(
       margin: EdgeInsets.all(16.w),
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [colorScheme.primary.withOpacity(0.1), colorScheme.secondary.withOpacity(0.1)],
+          colors: [
+            colorScheme.primary.withOpacity(0.1),
+            colorScheme.secondary.withOpacity(0.1),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: colorScheme.primary.withOpacity(0.2), width: 1),
+        border: Border.all(
+          color: colorScheme.primary.withOpacity(0.2),
+          width: 1,
+        ),
       ),
       child: Row(
         children: [
           Expanded(
-            child: _buildStatItem(context, Icons.play_circle_outline_rounded, '${videos.length}', 'total_videos'.tr),
+            child: _buildStatItem(
+              context,
+              Icons.play_circle_outline_rounded,
+              '${videos.length}',
+              'total_videos'.tr,
+            ),
           ),
           Container(width: 1.w, height: 40.h, color: theme.dividerColor),
-          Expanded(child: _buildStatItem(context, Icons.access_time_rounded, '${totalDuration}m', 'total_duration'.tr)),
+          Expanded(
+            child: _buildStatItem(
+              context,
+              Icons.access_time_rounded,
+              '${totalDuration}m',
+              'total_duration'.tr,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildStatItem(BuildContext context, IconData icon, String value, String label) {
+  Widget _buildStatItem(
+    BuildContext context,
+    IconData icon,
+    String value,
+    String label,
+  ) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -140,7 +176,12 @@ class MyVideoView extends StatelessWidget {
     );
   }
 
-  Widget _buildVideoCard(BuildContext context, CourseVideo video, int index, MycourseController controller) {
+  Widget _buildVideoCard(
+    BuildContext context,
+    CourseVideo video,
+    int index,
+    MycourseController controller,
+  ) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
@@ -153,7 +194,10 @@ class MyVideoView extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: isDark ? Colors.black.withOpacity(0.3) : Colors.black.withOpacity(0.08),
+            color:
+                isDark
+                    ? Colors.black.withOpacity(0.3)
+                    : Colors.black.withOpacity(0.08),
             blurRadius: 8.r,
             offset: Offset(0, 4.h),
           ),
@@ -174,9 +218,15 @@ class MyVideoView extends StatelessWidget {
                     width: 80.w,
                     height: 80.w,
                     decoration: BoxDecoration(
-                      image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(thumbnailUrl)),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(thumbnailUrl),
+                      ),
                       gradient: LinearGradient(
-                        colors: [colorScheme.primary.withOpacity(0.8), colorScheme.secondary.withOpacity(0.8)],
+                        colors: [
+                          colorScheme.primary.withOpacity(0.8),
+                          colorScheme.secondary.withOpacity(0.8),
+                        ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -185,12 +235,21 @@ class MyVideoView extends StatelessWidget {
                     ),
                     child: Stack(
                       children: [
-                        Center(child: Icon(Icons.play_arrow_rounded, size: 40.sp, color: AppColors.white)),
+                        Center(
+                          child: Icon(
+                            Icons.play_arrow_rounded,
+                            size: 40.sp,
+                            color: AppColors.white,
+                          ),
+                        ),
                         Positioned(
                           top: 6.h,
                           right: 6.w,
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 6.w,
+                              vertical: 2.h,
+                            ),
                             decoration: BoxDecoration(
                               color: AppColors.white.withOpacity(0.9),
                               borderRadius: BorderRadius.circular(8.r),
@@ -231,18 +290,30 @@ class MyVideoView extends StatelessWidget {
                         // Duration and Course Info
                         Row(
                           children: [
-                            Icon(Icons.access_time, size: 16.sp, color: AppTextStyles.small().color),
+                            Icon(
+                              Icons.access_time,
+                              size: 16.sp,
+                              color: AppTextStyles.small().color,
+                            ),
                             SizedBox(width: 4.w),
                             Text(
                               '${video.durationMinutes ?? 0} min',
-                              style: AppTextStyles.small().copyWith(fontSize: 12.sp),
+                              style: AppTextStyles.small().copyWith(
+                                fontSize: 12.sp,
+                              ),
                             ),
                             SizedBox(width: 16.w),
-                            Icon(Icons.video_library_rounded, size: 16.sp, color: AppTextStyles.small().color),
+                            Icon(
+                              Icons.video_library_rounded,
+                              size: 16.sp,
+                              color: AppTextStyles.small().color,
+                            ),
                             SizedBox(width: 4.w),
                             Text(
                               "${'course_id'.tr} ${video.courseId}",
-                              style: AppTextStyles.small().copyWith(fontSize: 12.sp),
+                              style: AppTextStyles.small().copyWith(
+                                fontSize: 12.sp,
+                              ),
                             ),
                           ],
                         ),
@@ -286,12 +357,21 @@ class MyVideoView extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButton(BuildContext context, IconData icon, String label, Color color, VoidCallback onTap) {
+  Widget _buildActionButton(
+    BuildContext context,
+    IconData icon,
+    String label,
+    Color color,
+    VoidCallback onTap,
+  ) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-        decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(8.r)),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(8.r),
+        ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -299,7 +379,11 @@ class MyVideoView extends StatelessWidget {
             SizedBox(width: 4.w),
             Text(
               label,
-              style: AppTextStyles.caption().copyWith(fontSize: 11.sp, fontWeight: FontWeight.w600, color: color),
+              style: AppTextStyles.caption().copyWith(
+                fontSize: 11.sp,
+                fontWeight: FontWeight.w600,
+                color: color,
+              ),
             ),
           ],
         ),
@@ -315,9 +399,17 @@ class MyVideoView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(colorScheme.primary), strokeWidth: 3.w),
+          CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(colorScheme.primary),
+            strokeWidth: 3.w,
+          ),
           SizedBox(height: 16.h),
-          Text('loading_videos'.tr, style: AppTextStyles.body().copyWith(color: AppTextStyles.caption().color)),
+          Text(
+            'loading_videos'.tr,
+            style: AppTextStyles.body().copyWith(
+              color: AppTextStyles.caption().color,
+            ),
+          ),
         ],
       ),
     );
@@ -339,7 +431,11 @@ class MyVideoView extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.video_library_outlined, size: 80.sp, color: AppTextStyles.caption().color),
+          Icon(
+            Icons.video_library_outlined,
+            size: 80.sp,
+            color: AppTextStyles.caption().color,
+          ),
           SizedBox(height: 16.h),
           Text('no_videos_available'.tr, style: AppTextStyles.headlineMedium()),
           SizedBox(height: 8.h),
@@ -357,7 +453,9 @@ class MyVideoView extends StatelessWidget {
               backgroundColor: colorScheme.primary,
               foregroundColor: AppColors.white,
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.r),
+              ),
             ),
           ),
         ],
@@ -365,12 +463,22 @@ class MyVideoView extends StatelessWidget {
     );
   }
 
-  void _playVideo(BuildContext context, CourseVideo video, MycourseController controller) {
+  void _playVideo(
+    BuildContext context,
+    CourseVideo video,
+    MycourseController controller,
+  ) {
     final videoController = Get.put(VideoController());
     // Implement video player navigation
     // Get.to(VideoPlayerView(video: video));
     videoController.fetchVideo(video.videoId);
-    Get.toNamed(Routes.VIDEO, arguments: {"videoId": video.videoId, "courseId": video.courseId});
+    Get.toNamed(
+      Routes.VIDEO,
+      arguments: {
+        "videoId": video.videoId,
+        "courseId": video.courseId.toString(),
+      },
+    );
   }
 
   // void _downloadVideo(BuildContext context, CourseVideo video, MycourseController controller) {

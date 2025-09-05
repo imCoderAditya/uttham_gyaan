@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
-
+import 'package:get/get.dart';
 
 class GlobalLoader {
   static void show() {
@@ -19,10 +17,10 @@ class GlobalLoader {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-               CircularProgressIndicator(),
+                CircularProgressIndicator(),
                 const SizedBox(height: 20),
                 Text(
-                  'Loading...',
+                  'loading_text'.tr,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ],

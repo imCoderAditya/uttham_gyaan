@@ -16,6 +16,8 @@ abstract class Routes {
   static const SPLASH = _Paths.SPLASH;
   static const QUIZ = _Paths.QUIZ;
   static const BANK = _Paths.BANK;
+  static const WITHDRAWAL = _Paths.WITHDRAWAL;
+  static const CERTIFICATE = _Paths.CERTIFICATE;
 }
 
 abstract class _Paths {
@@ -33,4 +35,6 @@ abstract class _Paths {
   static const SPLASH = '/splash';
   static const QUIZ = '/quiz';
   static const BANK = '/bank';
+  static const WITHDRAWAL = '/withdrawal';
+  static const CERTIFICATE = '/certificate';
 }

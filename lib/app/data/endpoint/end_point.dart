@@ -23,4 +23,7 @@ class EndPoint {
   static const Addbank = "$baseurl/bankdetails/addorupdate";
   static const getbank = "$baseurl/bankdetails/get";
   static const getCommissions = "$baseurl/affiliate/commissions";
+  static const paymentsTransactions = "$baseurl/payments/transactions";
+  static const paymentsRequest = "$baseurl/payments/withdraw";
+  static const certificateAPI = "$baseurl/courseprogress/summary";
 }

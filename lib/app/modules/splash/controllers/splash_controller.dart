@@ -29,7 +29,7 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
 
   // Loading state
   final isLoading = true.obs;
-  final loadingText = "loading_text".obs;
+  final loadingText = "loading_text".tr.obs;
 
   @override
   void onInit() {

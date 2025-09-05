@@ -8,6 +8,7 @@ import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
 import 'package:uttham_gyaan/app/data/model/quiz/quiz_result_model.dart';
 import 'package:uttham_gyaan/app/data/model/video/video_details_model.dart';
+import 'package:uttham_gyaan/app/modules/certificate/views/certificate_view.dart';
 import 'package:uttham_gyaan/app/modules/quiz/views/quiz_view.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../controllers/video_controller.dart';
@@ -32,7 +33,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
   Duration _currentPosition = Duration.zero;
   Duration _totalDuration = Duration.zero;
   bool _showControls = true;
-
+  String? courseId;
   @override
   void initState() {
     super.initState();
@@ -40,7 +41,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
 
     // Get video ID from arguments
     final videoId = Get.arguments?['videoId'] ?? 0;
-    final courseId = Get.arguments?['courseId'] ?? 0;
+    courseId = Get.arguments?['courseId'] ?? "";
     debugPrint("CourseId $courseId\n videoId Id : $videoId");
     _videoController.getQuizResult(videoId: videoId);
     _fetchVideoData(videoId);
@@ -551,7 +552,26 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                           ),
                         )
                     : const SizedBox.shrink(), // if course not completed → show nothing
-
+                SizedBox(height: 10.h),
+                (_videoController
+                            .videoDetailsModel
+                            .value
+                            ?.data
+                            ?.isQuizCompleted ==
+                        false)
+                    ? SizedBox()
+                    : MaterialButton(
+                      height: 40.h,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      minWidth: double.infinity,
+                      onPressed: () {
+                        Get.to(CertificateView(courseId: courseId ?? ""));
+                      },
+                      color: AppColors.primaryColor,
+                      child: Text("download_certificate".tr),
+                    ),
                 SizedBox(height: 100.h),
               ],
             ),

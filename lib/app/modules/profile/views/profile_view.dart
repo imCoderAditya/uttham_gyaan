@@ -21,15 +21,26 @@ class ProfileView extends GetView<ProfileController> {
           backgroundColor: AppColors.backgroundColor,
           body: CustomScrollView(
             slivers: [
-              Obx(() => _buildSliverAppBar(context, controller.profileModel.value?.data)),
+              Obx(
+                () => _buildSliverAppBar(
+                  context,
+                  controller.profileModel.value?.data,
+                ),
+              ),
               Obx(
                 () => SliverToBoxAdapter(
                   child: Column(
                     children: [
                       SizedBox(height: 24.h),
-                      _buildProfileInfoCard(context, controller.profileModel.value?.data),
+                      _buildProfileInfoCard(
+                        context,
+                        controller.profileModel.value?.data,
+                      ),
                       SizedBox(height: 32.h),
-                      _buildContactInfoCard(context, controller.profileModel.value?.data),
+                      _buildContactInfoCard(
+                        context,
+                        controller.profileModel.value?.data,
+                      ),
                       SizedBox(height: 40.h),
                     ],
                   ),
@@ -53,7 +64,11 @@ class ProfileView extends GetView<ProfileController> {
         background: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [AppColors.primaryColor, AppColors.accentColor, AppColors.primaryColor.withOpacity(0.8)],
+              colors: [
+                AppColors.primaryColor,
+                AppColors.accentColor,
+                AppColors.primaryColor.withOpacity(0.8),
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               stops: const [0.0, 0.6, 1.0],
@@ -68,7 +83,10 @@ class ProfileView extends GetView<ProfileController> {
                 child: Container(
                   width: 200.w,
                   height: 200.h,
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.white.withOpacity(0.08)),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.white.withOpacity(0.08),
+                  ),
                 ),
               ),
               Positioned(
@@ -77,7 +95,10 @@ class ProfileView extends GetView<ProfileController> {
                 child: Container(
                   width: 120.w,
                   height: 120.h,
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.white.withOpacity(0.05)),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.white.withOpacity(0.05),
+                  ),
                 ),
               ),
               Positioned(
@@ -86,7 +107,10 @@ class ProfileView extends GetView<ProfileController> {
                 child: Container(
                   width: 60.w,
                   height: 60.h,
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.white.withOpacity(0.06)),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.white.withOpacity(0.06),
+                  ),
                 ),
               ),
               // Profile content
@@ -104,7 +128,10 @@ class ProfileView extends GetView<ProfileController> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: LinearGradient(
-                              colors: [AppColors.white.withOpacity(0.3), AppColors.white.withOpacity(0.1)],
+                              colors: [
+                                AppColors.white.withOpacity(0.3),
+                                AppColors.white.withOpacity(0.1),
+                              ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
@@ -122,7 +149,11 @@ class ProfileView extends GetView<ProfileController> {
                             child: CircleAvatar(
                               radius: 58.r,
                               backgroundColor: AppColors.lightSurface,
-                              child: Icon(Icons.person_outline_rounded, size: 60.sp, color: AppColors.primaryColor),
+                              child: Icon(
+                                Icons.person_outline_rounded,
+                                size: 60.sp,
+                                color: AppColors.primaryColor,
+                              ),
                             ),
                           ),
                         ),
@@ -135,21 +166,33 @@ class ProfileView extends GetView<ProfileController> {
                               padding: EdgeInsets.all(8.w),
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: [AppColors.sucessPrimary, AppColors.sucessPrimary.withOpacity(0.8)],
+                                  colors: [
+                                    AppColors.sucessPrimary,
+                                    AppColors.sucessPrimary.withOpacity(0.8),
+                                  ],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                 ),
                                 shape: BoxShape.circle,
-                                border: Border.all(color: AppColors.white, width: 3.w),
+                                border: Border.all(
+                                  color: AppColors.white,
+                                  width: 3.w,
+                                ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColors.sucessPrimary.withOpacity(0.4),
+                                    color: AppColors.sucessPrimary.withOpacity(
+                                      0.4,
+                                    ),
                                     blurRadius: 12.r,
                                     offset: Offset(0, 4.h),
                                   ),
                                 ],
                               ),
-                              child: Icon(Icons.verified_rounded, size: 20.sp, color: AppColors.white),
+                              child: Icon(
+                                Icons.verified_rounded,
+                                size: 20.sp,
+                                color: AppColors.white,
+                              ),
                             ),
                           ),
                       ],
@@ -157,21 +200,28 @@ class ProfileView extends GetView<ProfileController> {
                     SizedBox(height: 20.h),
                     // User name with enhanced styling
                     Text(
-                      userData?.fullName ?? "loading".tr,
+                      userData?.fullName?.capitalize?? "loading".tr,
                       style: AppTextStyles.headlineLarge().copyWith(
                         color: AppColors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 28.sp,
                         letterSpacing: 0.5,
                         shadows: [
-                          Shadow(color: AppColors.black.withOpacity(0.4), offset: Offset(0, 3.h), blurRadius: 6.r),
+                          Shadow(
+                            color: AppColors.black.withOpacity(0.4),
+                            offset: Offset(0, 3.h),
+                            blurRadius: 6.r,
+                          ),
                         ],
                       ),
                     ),
                     SizedBox(height: 12.h),
                     // Verification status chip
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 8.h,
+                      ),
                       decoration: BoxDecoration(
                         color:
                             userData?.isVerified == true
@@ -190,16 +240,25 @@ class ProfileView extends GetView<ProfileController> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            userData?.isVerified == true ? Icons.verified_user_rounded : Icons.pending_outlined,
+                            userData?.isVerified == true
+                                ? Icons.verified_user_rounded
+                                : Icons.pending_outlined,
                             size: 16.sp,
-                            color: userData?.isVerified == true ? AppColors.sucessPrimary : AppColors.secondaryPrimary,
+                            color:
+                                userData?.isVerified == true
+                                    ? AppColors.sucessPrimary
+                                    : AppColors.secondaryPrimary,
                           ),
                           SizedBox(width: 6.w),
                           Text(
-                            userData?.isVerified == true ? "verified_account".tr : "pending_verification".tr,
+                            userData?.isVerified == true
+                                ? "verified_account".tr
+                                : "pending_verification".tr,
                             style: AppTextStyles.caption().copyWith(
                               color:
-                                  userData?.isVerified == true ? AppColors.sucessPrimary : AppColors.secondaryPrimary,
+                                  userData?.isVerified == true
+                                      ? AppColors.sucessPrimary
+                                      : AppColors.secondaryPrimary,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -216,7 +275,10 @@ class ProfileView extends GetView<ProfileController> {
       // App bar when collapsed
       title: Text(
         'profile'.tr,
-        style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white, fontWeight: FontWeight.bold),
+        style: AppTextStyles.headlineMedium().copyWith(
+          color: AppColors.white,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       actions: [
         IconButton(
@@ -244,7 +306,13 @@ class ProfileView extends GetView<ProfileController> {
       decoration: BoxDecoration(
         color: AppColors.surfaceColor,
         borderRadius: BorderRadius.circular(24.r),
-        boxShadow: [BoxShadow(color: AppColors.black.withOpacity(0.08), blurRadius: 20.r, offset: Offset(0, 8.h))],
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withOpacity(0.08),
+            blurRadius: 20.r,
+            offset: Offset(0, 8.h),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -261,7 +329,11 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                   borderRadius: BorderRadius.circular(16.r),
                 ),
-                child: Icon(Icons.person_rounded, color: AppColors.white, size: 24.sp),
+                child: Icon(
+                  Icons.person_rounded,
+                  color: AppColors.white,
+                  size: 24.sp,
+                ),
               ),
               SizedBox(width: 16.w),
               Expanded(
@@ -278,7 +350,9 @@ class ProfileView extends GetView<ProfileController> {
                     SizedBox(height: 4.h),
                     Text(
                       "your_profile_details".tr,
-                      style: AppTextStyles.caption().copyWith(color: AppColors.textSecondary),
+                      style: AppTextStyles.caption().copyWith(
+                        color: AppColors.textSecondary,
+                      ),
                     ),
                   ],
                 ),
@@ -286,14 +360,22 @@ class ProfileView extends GetView<ProfileController> {
             ],
           ),
           SizedBox(height: 24.h),
-          _buildInfoRow(context, Icons.badge_outlined, "full_name".tr, userData?.fullName ?? "not_provided".tr),
+          _buildInfoRow(
+            context,
+            Icons.badge_outlined,
+            "full_name".tr,
+            userData?.fullName?.capitalize ?? "not_provided".tr,
+          ),
           SizedBox(height: 20.h),
           _buildInfoRow(
             context,
             Icons.verified_user_outlined,
             "account_status".tr,
             userData?.isVerified == true ? "verified".tr : "unverified".tr,
-            valueColor: userData?.isVerified == true ? AppColors.sucessPrimary : AppColors.secondaryPrimary,
+            valueColor:
+                userData?.isVerified == true
+                    ? AppColors.sucessPrimary
+                    : AppColors.secondaryPrimary,
           ),
         ],
       ),
@@ -307,7 +389,13 @@ class ProfileView extends GetView<ProfileController> {
       decoration: BoxDecoration(
         color: AppColors.surfaceColor,
         borderRadius: BorderRadius.circular(24.r),
-        boxShadow: [BoxShadow(color: AppColors.black.withOpacity(0.08), blurRadius: 20.r, offset: Offset(0, 8.h))],
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withOpacity(0.08),
+            blurRadius: 20.r,
+            offset: Offset(0, 8.h),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,13 +406,20 @@ class ProfileView extends GetView<ProfileController> {
                 padding: EdgeInsets.all(12.w),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [AppColors.accentColor, AppColors.red.withOpacity(0.8)],
+                    colors: [
+                      AppColors.accentColor,
+                      AppColors.red.withOpacity(0.8),
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(16.r),
                 ),
-                child: Icon(Icons.contact_mail_rounded, color: AppColors.white, size: 24.sp),
+                child: Icon(
+                  Icons.contact_mail_rounded,
+                  color: AppColors.white,
+                  size: 24.sp,
+                ),
               ),
               SizedBox(width: 16.w),
               Expanded(
@@ -341,7 +436,9 @@ class ProfileView extends GetView<ProfileController> {
                     SizedBox(height: 4.h),
                     Text(
                       "how_to_reach_you".tr,
-                      style: AppTextStyles.caption().copyWith(color: AppColors.textSecondary),
+                      style: AppTextStyles.caption().copyWith(
+                        color: AppColors.textSecondary,
+                      ),
                     ),
                   ],
                 ),
@@ -349,15 +446,31 @@ class ProfileView extends GetView<ProfileController> {
             ],
           ),
           SizedBox(height: 24.h),
-          _buildInfoRow(context, Icons.email_outlined, "email_address".tr, userData?.email ?? "not_provided".tr),
+          _buildInfoRow(
+            context,
+            Icons.email_outlined,
+            "email_address".tr,
+            userData?.email ?? "not_provided".tr,
+          ),
           SizedBox(height: 20.h),
-          _buildInfoRow(context, Icons.phone_outlined, "mobile_number".tr, userData?.phone ?? "not_provided".tr),
+          _buildInfoRow(
+            context,
+            Icons.phone_outlined,
+            "mobile_number".tr,
+            userData?.phone ?? "not_provided".tr,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildInfoRow(BuildContext context, IconData icon, String label, String value, {Color? valueColor}) {
+  Widget _buildInfoRow(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String value, {
+    Color? valueColor,
+  }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -376,7 +489,10 @@ class ProfileView extends GetView<ProfileController> {
             children: [
               Text(
                 label,
-                style: AppTextStyles.caption().copyWith(color: AppColors.textSecondary, fontWeight: FontWeight.w500),
+                style: AppTextStyles.caption().copyWith(
+                  color: AppColors.textSecondary,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               SizedBox(height: 4.h),
               Text(

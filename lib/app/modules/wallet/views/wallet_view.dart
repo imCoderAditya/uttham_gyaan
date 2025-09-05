@@ -7,10 +7,9 @@ import 'package:share_plus/share_plus.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
 import 'package:uttham_gyaan/app/data/model/wallet/wallet_model.dart';
+import 'package:uttham_gyaan/app/routes/app_pages.dart';
 import 'package:uttham_gyaan/app/services/storage/local_storage_service.dart';
 import 'package:uttham_gyaan/components/app_drawer.dart';
-
-import '../../../routes/app_pages.dart';
 import '../../Bank/components/commision_screen.dart';
 import '../../Bank/views/bank_view.dart';
 import '../controllers/wallet_controller.dart';
@@ -91,12 +90,15 @@ class WalletView extends GetView<WalletController> {
       ),
       actions: [
         TextButton(
-          onPressed:(){
-      Get.to(BankView());
-    },
-          child: Icon( Icons.add ,size: 40,),
+          onPressed: () {
+            Get.to(BankView());
+          },
+          child: Icon(
+            Icons.comment_bank_rounded,
+            size: 30,
+            color: AppColors.white,
+          ),
         ),
-
       ],
     );
   }
@@ -105,12 +107,44 @@ class WalletView extends GetView<WalletController> {
     return AnimatedOpacity(
       opacity: 1.0,
       duration: Duration(milliseconds: 600),
-      child: Text(
-        "${'hello'.tr} $name",
-        style: AppTextStyles.headlineMedium().copyWith(
-          fontSize: 24.sp,
-          fontWeight: FontWeight.w600,
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "${'hello'.tr} ${name.capitalize}",
+            style: AppTextStyles.headlineMedium().copyWith(
+              fontSize: 24.sp,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(Routes.WITHDRAWAL);
+            },
+            child: Container(
+              height: 35.h,
+              width: 100.w,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors:
+                      AppColors
+                          .headerGradientColors, // <-- Your gradient color list
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(5.r),
+              ),
+              child: Text(
+                'withdrawal'.tr,
+                style: AppTextStyles.button.copyWith(
+                  color: Colors.white,
+                  fontSize: 14.sp,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -158,7 +192,6 @@ class WalletView extends GetView<WalletController> {
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Icon(
-
                   Icons.account_balance_wallet,
                   color: Colors.white,
                   size: 20.sp,
@@ -177,12 +210,11 @@ class WalletView extends GetView<WalletController> {
           ),
           SizedBox(height: 8.h),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               Get.to(CommissionsScreen());
-
             },
             child: Text(
-              'available_commission'.tr,
+              'available_commission_'.tr,
               style: AppTextStyles.caption().copyWith(
                 color: Colors.white.withOpacity(0.8),
                 fontSize: 14.sp,
@@ -502,7 +534,7 @@ class WalletView extends GetView<WalletController> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
-          children:  [
+          children: [
             Icon(Icons.share, color: AppColors.white, size: 22),
             SizedBox(width: 10),
             Text(

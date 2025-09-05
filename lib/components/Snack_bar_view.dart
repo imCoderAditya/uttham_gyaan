@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart' show AppColors;
 import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
 
 class SnackBarView {
@@ -37,8 +38,8 @@ class SnackBarView {
     final entry = _buildOverlayEntry(
       message: message,
       icon: icon,
-      colors: [Color(0xFFDE033F), Color(0xFFDE033F).withOpacity(0.8)],
-      shadowColor: Color(0xFFDE033F),
+      colors: [AppColors.accentColor, AppColors.primaryColor.withOpacity(0.8)],
+      shadowColor:AppColors.accentColor,
       actionLabel: actionLabel,
       onActionPressed: onActionPressed,
     );

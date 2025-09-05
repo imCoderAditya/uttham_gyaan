@@ -1,8 +1,9 @@
 import 'package:get/get.dart';
 
-
 import '../modules/Bank/bindings/bank_binding.dart';
 import '../modules/Bank/views/bank_view.dart';
+import '../modules/certificate/bindings/certificate_binding.dart';
+import '../modules/certificate/views/certificate_view.dart';
 import '../modules/courseDetails/bindings/course_details_binding.dart';
 import '../modules/courseDetails/views/course_details_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -27,6 +28,8 @@ import '../modules/video/bindings/video_binding.dart';
 import '../modules/video/views/video_view.dart';
 import '../modules/wallet/bindings/wallet_binding.dart';
 import '../modules/wallet/views/wallet_view.dart';
+import '../modules/withdrawal/bindings/withdrawal_binding.dart';
+import '../modules/withdrawal/views/withdrawal_view.dart';
 
 // ignore_for_file: constant_identifier_names
 
@@ -88,6 +91,16 @@ class AppPages {
       name: _Paths.BANK,
       page: () => const BankView(),
       binding: BankBinding(),
+    ),
+    GetPage(
+      name: _Paths.WITHDRAWAL,
+      page: () => const WithdrawalView(),
+      binding: WithdrawalBinding(),
+    ),
+    GetPage(
+      name: _Paths.CERTIFICATE,
+      page: () => const CertificateView(),
+      binding: CertificateBinding(),
     ),
   ];
 }
