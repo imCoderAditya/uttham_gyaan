@@ -247,5 +247,7 @@
   "success": "सफलता",
   "failed_to_fetch": "बैंक विवरण प्राप्त करने में विफल",
   "failed_to_save": "बैंक विवरण सहेजने में विफल",
-  "user_id_missing": "उपयोगकर्ता ID उपलब्ध नहीं है"
+  "user_id_missing": "उपयोगकर्ता ID उपलब्ध नहीं है",
+  "download_certificate": "प्रमाणपत्र डाउनलोड करें",
+  "no_certificate_available": "कोई प्रमाणपत्र उपलब्ध नहीं है"
 }

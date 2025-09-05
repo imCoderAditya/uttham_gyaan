@@ -11,6 +11,7 @@ import 'package:uttham_gyaan/app/data/model/video/video_details_model.dart';
 import 'package:uttham_gyaan/app/modules/quiz/views/quiz_view.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../controllers/video_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VideoView extends StatefulWidget {
   const VideoView({super.key});
@@ -43,6 +44,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
     final courseId = Get.arguments?['courseId'] ?? 0;
     debugPrint("CourseId $courseId\n videoId Id : $videoId");
     _videoController.getQuizResult(videoId: videoId);
+    _videoController.fetchCourseProgress(courseId: courseId);
     _fetchVideoData(videoId);
   }
 
@@ -202,6 +204,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
       final videoData = _videoController.videoDetailsModel.value?.data?.video;
       final progressData =
           _videoController.videoDetailsModel.value?.data?.progress;
+      final courseProgressData = _videoController.courseProgressModel.value?.data;
 
       if (videoData == null) {
         return _buildErrorScreen(theme);
@@ -234,6 +237,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                     isDark,
                     videoData,
                     progressData,
+                    courseProgressData,
                   ),
                 ],
               ),
@@ -455,6 +459,7 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
     bool isDark,
     Video video,
     progress,
+      courseProgressData,
   ) {
     return Container(
       margin: EdgeInsets.only(top: 1.h),
@@ -476,7 +481,6 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
               ),
             ),
           ),
-
           Padding(
             padding: EdgeInsets.all(24.w),
             child: Column(
@@ -496,42 +500,92 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                     : SizedBox(),
                 (progress.isCompleted == true)
                     ? (_videoController
-                                .videoDetailsModel
+                    .videoDetailsModel
+                    .value
+                    ?.data
+                    ?.isQuizCompleted ==
+                    false)
+                    ? _buildAdditionalInfo(
+                  video,
+                  colorScheme,
+                ) // quiz section
+                    : Padding(
+                  padding: const EdgeInsets.only(top: 30.0),
+                  child: Column(
+                    children: [
+                      MaterialButton(
+                        minWidth: double.infinity,
+                        onPressed: () async {
+                          await _videoController.getQuizResult(
+                            videoId: video.videoId,
+                          );
+                          showQuizResultDialog(
+                            context,
+                            _videoController
+                                .quizResultModel
                                 .value
                                 ?.data
-                                ?.isQuizCompleted ==
-                            false)
-                        ? _buildAdditionalInfo(
-                          video,
-                          colorScheme,
-                        ) // quiz section
-                        : Padding(
-                          padding: const EdgeInsets.only(top: 30.0),
+                                ?.firstOrNull,
+                          );
+
+                          debugPrint(
+                            _videoController
+                                .quizResultModel
+                                .value
+                                ?.data
+                                ?.firstOrNull
+                                .toString(),
+                          );
+                        },
+                        color: AppColors.primaryColor,
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 14,
+                        ),
+                        splashColor: Colors.white.withOpacity(0.2),
+                        child: Text(
+                          "complete_quiz".tr,
+                          style: AppTextStyles.body().copyWith(
+                            color: AppColors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      if (courseProgressData?.overallCompletionPercentage == 100.0)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20.0),
                           child: MaterialButton(
                             minWidth: double.infinity,
                             onPressed: () async {
-                              await _videoController.getQuizResult(
-                                videoId: video.videoId,
-                              );
-                              showQuizResultDialog(
-                                context,
-                                _videoController
-                                    .quizResultModel
-                                    .value
-                                    ?.data
-                                    ?.firstOrNull,
-                              );
-
-                              debugPrint(
-                                _videoController
-                                    .quizResultModel
-                                    .value
-                                    ?.data
-                                    ?.firstOrNull
-                                    .toString(),
-                              );
+                              final url = courseProgressData?.certificateLink;
+                              if (url != null) {
+                                final uri = Uri.parse(url);
+                                if (await canLaunchUrl(uri)) {
+                                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                                } else {
+                                  Get.snackbar(
+                                    'Error',
+                                    'Could not launch certificate URL',
+                                    snackPosition: SnackPosition.BOTTOM,
+                                    backgroundColor: AppColors.red,
+                                    colorText: AppColors.white,
+                                  );
+                                }
+                              } else {
+                                Get.snackbar(
+                                  'Error',
+                                  'No certificate URL available',
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  backgroundColor: AppColors.red,
+                                  colorText: AppColors.white,
+                                );
+                              }
                             },
-                            color: AppColors.primaryColor,
+                            color: AppColors.sucessPrimary,
                             elevation: 4,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -542,14 +596,17 @@ class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
                             ),
                             splashColor: Colors.white.withOpacity(0.2),
                             child: Text(
-                              "complete_quiz".tr,
+                              "download_certificate".tr,
                               style: AppTextStyles.body().copyWith(
                                 color: AppColors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                        )
+                        ),
+                    ],
+                  ),
+                )
                     : const SizedBox.shrink(), // if course not completed → show nothing
 
                 SizedBox(height: 100.h),

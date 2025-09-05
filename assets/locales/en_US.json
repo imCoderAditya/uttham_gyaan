@@ -196,7 +196,8 @@
   "no_results_available": "No results available.",
   "results": "Results",
   "min": "min",
-
+  "download_certificate": "Download Certificate",
+  "no_certificate_available": "No Certificate Available",
   "bank_details": "Bank Details",
   "no_bank_details": "No bank details found. Add now!",
   "account_holder_name": "Account Holder Name",
