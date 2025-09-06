@@ -8,7 +8,6 @@ import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
 import 'package:uttham_gyaan/app/data/model/course/my_course_model.dart';
 import 'package:uttham_gyaan/app/modules/mycourse/views/my_video_view.dart';
 import 'package:uttham_gyaan/components/app_drawer.dart';
-
 import '../controllers/mycourse_controller.dart';
 
 class MycourseView extends GetView<MycourseController> {
@@ -25,7 +24,7 @@ class MycourseView extends GetView<MycourseController> {
         return Obx(() {
           final courses = controller.myCourseModel.value?.myCourseData ?? [];
           return Scaffold(
-            drawer: isMenuDisable == true ? null:AppDrawer(),
+            drawer: isMenuDisable == true ? null : AppDrawer(),
             backgroundColor: theme.scaffoldBackgroundColor,
             appBar: _buildAppBar(context, controller),
             body: Column(
@@ -67,7 +66,12 @@ class MycourseView extends GetView<MycourseController> {
                                   controller.fetchAllCourseVideo(
                                     courses[index].courseId,
                                   );
-                                  Get.to(MyVideoView());
+                                  Get.to(
+                                    MyVideoView(
+                                      courseId:
+                                          courses[index].courseId.toString(),
+                                    ),
+                                  );
                                 },
                                 child: _buildCourseCard(
                                   context,

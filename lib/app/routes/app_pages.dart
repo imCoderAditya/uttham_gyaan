@@ -28,6 +28,8 @@ import '../modules/video/bindings/video_binding.dart';
 import '../modules/video/views/video_view.dart';
 import '../modules/wallet/bindings/wallet_binding.dart';
 import '../modules/wallet/views/wallet_view.dart';
+import '../modules/webview/bindings/webview_binding.dart';
+import '../modules/webview/views/webview_view.dart';
 import '../modules/withdrawal/bindings/withdrawal_binding.dart';
 import '../modules/withdrawal/views/withdrawal_view.dart';
 
@@ -101,6 +103,11 @@ class AppPages {
       name: _Paths.CERTIFICATE,
       page: () => const CertificateView(),
       binding: CertificateBinding(),
+    ),
+    GetPage(
+      name: _Paths.WEBVIEW,
+      page: () => const WebviewView(),
+      binding: WebviewBinding(),
     ),
   ];
 }

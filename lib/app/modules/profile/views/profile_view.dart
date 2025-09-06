@@ -59,6 +59,7 @@ class ProfileView extends GetView<ProfileController> {
       floating: false,
       pinned: true,
       elevation: 0,
+      centerTitle: false,
       backgroundColor: Colors.transparent,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(

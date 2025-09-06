@@ -9,6 +9,7 @@ class AppTheme {
     primaryColor: AppColors.primaryColor,
     scaffoldBackgroundColor: AppColors.lightBackground,
     appBarTheme: const AppBarTheme(
+        centerTitle: true,
       actionsIconTheme: IconThemeData(color: AppColors.primaryColor),
       surfaceTintColor: Colors.transparent,
       backgroundColor: AppColors.lightBackground,
@@ -35,6 +36,7 @@ class AppTheme {
     primaryColor: AppColors.primaryColor,
     scaffoldBackgroundColor: AppColors.darkBackground,
     appBarTheme: const AppBarTheme(
+      centerTitle: true,
       surfaceTintColor: Colors.transparent,
       backgroundColor: AppColors.darkBackground,
       elevation: 4,

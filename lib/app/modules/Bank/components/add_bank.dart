@@ -411,7 +411,7 @@ class AddBankView extends GetView<BankController> {
     required String text,
     required VoidCallback onPressed,
   }) {
-    return Container(
+    return SizedBox(
       height: 48.h,
       child: OutlinedButton(
         onPressed: onPressed,

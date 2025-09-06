@@ -18,6 +18,7 @@ abstract class Routes {
   static const BANK = _Paths.BANK;
   static const WITHDRAWAL = _Paths.WITHDRAWAL;
   static const CERTIFICATE = _Paths.CERTIFICATE;
+  static const WEBVIEW = _Paths.WEBVIEW;
 }
 
 abstract class _Paths {
@@ -37,4 +38,5 @@ abstract class _Paths {
   static const BANK = '/bank';
   static const WITHDRAWAL = '/withdrawal';
   static const CERTIFICATE = '/certificate';
+  static const WEBVIEW = '/webview';
 }

@@ -7,12 +7,14 @@ import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
 import 'package:uttham_gyaan/app/core/contants/constant.dart';
 import 'package:uttham_gyaan/app/data/model/video/course_video_model.dart';
+import 'package:uttham_gyaan/app/modules/certificate/views/certificate_view.dart';
 import 'package:uttham_gyaan/app/modules/mycourse/controllers/mycourse_controller.dart';
 import 'package:uttham_gyaan/app/modules/video/controllers/video_controller.dart';
 import 'package:uttham_gyaan/app/routes/app_pages.dart';
 
 class MyVideoView extends StatelessWidget {
-  const MyVideoView({super.key});
+  final String? courseId;
+  const MyVideoView({super.key, this.courseId});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,26 @@ class MyVideoView extends StatelessWidget {
           final videoList = controller.videoModel.value?.data ?? [];
 
           return Scaffold(
+            bottomNavigationBar: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              height: 80.h,
+              child: Column(
+                children: [
+                  MaterialButton(
+                    height: 40.h,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    minWidth: double.infinity,
+                    onPressed: () {
+                      Get.to(CertificateView(courseId: courseId ?? ""));
+                    },
+                    color: AppColors.primaryColor,
+                    child: Text("download_certificate".tr,style: AppTextStyles.button,),
+                  ),
+                ],
+              ),
+            ),
             backgroundColor: theme.scaffoldBackgroundColor,
             appBar: _buildAppBar(context, controller),
             body:

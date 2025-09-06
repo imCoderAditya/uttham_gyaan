@@ -237,15 +237,7 @@ class BankController extends GetxController {
     Get.dialog(const AddBankView());
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   void increment() => count.value++;
 }

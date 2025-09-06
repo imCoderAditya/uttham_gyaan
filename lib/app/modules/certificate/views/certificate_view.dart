@@ -47,11 +47,22 @@ class _CertificateViewState extends State<CertificateView> {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      title: Text('certificate'.tr, style: AppTextStyles.headlineMedium()),
+      title: Text('certificate'.tr, style: AppTextStyles.headlineMedium().copyWith(
+        color:AppColors.white
+      )),
       centerTitle: true,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: AppColors.headerGradientColors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+      ),
       backgroundColor: AppColors.surfaceColor,
       elevation: 0,
-      iconTheme: IconThemeData(color: AppColors.textPrimary),
+      iconTheme: IconThemeData(color: AppColors.white),
     );
   }
 
@@ -327,21 +338,23 @@ class _CertificateViewState extends State<CertificateView> {
   }
 
   Widget _buildDownloadButton(String certificateLink) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton.icon(
-        onPressed: () => controller.downloadCertificate(certificateLink),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.sucessPrimary,
-          padding: EdgeInsets.symmetric(vertical: 16.h),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
+    return certificateLink.isNotEmpty
+        ? SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            onPressed: () => controller.downloadCertificate(certificateLink),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.sucessPrimary,
+              padding: EdgeInsets.symmetric(vertical: 16.h),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+            ),
+            icon: Icon(Icons.download, color: AppColors.white, size: 20.w),
+            label: Text('download_certificate'.tr, style: AppTextStyles.button),
           ),
-        ),
-        icon: Icon(Icons.download, color: AppColors.white, size: 20.w),
-        label: Text('download_certificate'.tr, style: AppTextStyles.button),
-      ),
-    );
+        )
+        : SizedBox();
   }
 
   String _formatDate(DateTime? date) {
@@ -356,9 +369,9 @@ class _CertificateViewState extends State<CertificateView> {
     final mins = minutes % 60;
 
     if (hours > 0) {
-      return '${hours}${'hours_short'.tr} ${mins}${'minutes_short_with_h'.tr}';
+      return '$hours${'hours_short'.tr} $mins${'minutes_short_with_h'.tr}';
     } else {
-      return '${mins}${'minutes_short_with_h'.tr}';
+      return '$mins${'minutes_short_with_h'.tr}';
     }
   }
 }

@@ -47,7 +47,7 @@ class HomeView extends StatelessWidget {
                             height: 210,
                             onChange: (value) {
                               debugPrint("Response : ${value.id}");
-                                  // Get.to(CourseDetailsView(courseData:value));
+                              // Get.to(CourseDetailsView(courseData:value));
                             },
                             autoPlay: true,
                             indicatorStyle: IndicatorStyle.line,
@@ -57,23 +57,33 @@ class HomeView extends StatelessWidget {
 
                       // Courses Section
                       if (courses.isNotEmpty) ...[
-                        SliverToBoxAdapter(child: _buildSectionHeader(context, 'courses'.tr)),
+                        SliverToBoxAdapter(
+                          child: _buildSectionHeader(context, 'courses'.tr),
+                        ),
 
                         SliverPadding(
                           padding: EdgeInsets.symmetric(horizontal: 16.w),
                           sliver: SliverGrid(
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.75,
-                              crossAxisSpacing: 12.w,
-                              mainAxisSpacing: 12.h,
-                            ),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 0.75,
+                                  crossAxisSpacing: 12.w,
+                                  mainAxisSpacing: 12.h,
+                                ),
                             delegate: SliverChildBuilderDelegate(
                               (context, index) => GestureDetector(
                                 onTap: () {
-                                  Get.to(CourseDetailsView(courseData: courses[index]));
+                                  Get.to(
+                                    CourseDetailsView(
+                                      courseData: courses[index],
+                                    ),
+                                  );
                                 },
-                                child: _buildCourseCard(context, courses[index]),
+                                child: _buildCourseCard(
+                                  context,
+                                  courses[index],
+                                ),
                               ),
                               childCount: courses.length,
                             ),
@@ -93,9 +103,13 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context, HomeController controller) {
+  PreferredSizeWidget _buildAppBar(
+    BuildContext context,
+    HomeController controller,
+  ) {
     return AppBar(
       elevation: 0,
+      centerTitle: false,
       backgroundColor: Colors.transparent,
       flexibleSpace: Container(
         decoration: BoxDecoration(
@@ -106,15 +120,27 @@ class HomeView extends StatelessWidget {
           ),
         ),
       ),
-      title: Text('uttham_gyan'.tr, style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white)),
+      title: Text(
+        'uttham_gyan'.tr,
+        style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white),
+      ),
       actions: [
         Container(
           margin: EdgeInsets.only(right: 16.w, bottom: 5.h),
-          decoration: BoxDecoration(color: AppColors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(12.r)),
+          decoration: BoxDecoration(
+            color: AppColors.white.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(12.r),
+          ),
           child: IconButton(
-            icon: Icon(Icons.search_rounded, color: AppColors.white, size: 24.sp),
+            icon: Icon(
+              Icons.search_rounded,
+              color: AppColors.white,
+              size: 24.sp,
+            ),
             onPressed:
-                () => Get.to(SearchView(isDisableBackButton: true))?.then((value) {
+                () => Get.to(SearchView(isDisableBackButton: true))?.then((
+                  value,
+                ) {
                   controller.fetchAllCourse();
                 }),
           ),
@@ -134,10 +160,16 @@ class HomeView extends StatelessWidget {
           Container(
             width: 4.w,
             height: 24.h,
-            decoration: BoxDecoration(color: colorScheme.primary, borderRadius: BorderRadius.circular(2.r)),
+            decoration: BoxDecoration(
+              color: colorScheme.primary,
+              borderRadius: BorderRadius.circular(2.r),
+            ),
           ),
           SizedBox(width: 12.w),
-          Text(title, style: AppTextStyles.headlineLarge().copyWith(fontSize: 22.sp)),
+          Text(
+            title,
+            style: AppTextStyles.headlineLarge().copyWith(fontSize: 22.sp),
+          ),
         ],
       ),
     );
@@ -154,7 +186,10 @@ class HomeView extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: isDark ? Colors.black.withOpacity(0.3) : Colors.black.withOpacity(0.08),
+            color:
+                isDark
+                    ? Colors.black.withOpacity(0.3)
+                    : Colors.black.withOpacity(0.08),
             blurRadius: 8.r,
             offset: Offset(0, 4.h),
           ),
@@ -171,7 +206,10 @@ class HomeView extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
                 gradient: LinearGradient(
-                  colors: [colorScheme.primary.withOpacity(0.8), colorScheme.secondary.withOpacity(0.8)],
+                  colors: [
+                    colorScheme.primary.withOpacity(0.8),
+                    colorScheme.secondary.withOpacity(0.8),
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -179,11 +217,15 @@ class HomeView extends StatelessWidget {
               child:
                   course.thumbnailUrl != null
                       ? ClipRRect(
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(16.r),
+                        ),
                         child: Image.network(
                           course.thumbnailUrl!,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => _buildPlaceholderImage(context),
+                          errorBuilder:
+                              (context, error, stackTrace) =>
+                                  _buildPlaceholderImage(context),
                         ),
                       )
                       : _buildPlaceholderImage(context),
@@ -200,7 +242,11 @@ class HomeView extends StatelessWidget {
                 // Title
                 Text(
                   course.title ?? 'untitled_course'.tr,
-                  style: AppTextStyles.body().copyWith(fontSize: 13.sp, fontWeight: FontWeight.bold, height: 1.2),
+                  style: AppTextStyles.body().copyWith(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.bold,
+                    height: 1.2,
+                  ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -209,13 +255,27 @@ class HomeView extends StatelessWidget {
                 // Duration and Videos
                 Row(
                   children: [
-                    Icon(Icons.access_time, size: 11.sp, color: AppTextStyles.small().color),
+                    Icon(
+                      Icons.access_time,
+                      size: 11.sp,
+                      color: AppTextStyles.small().color,
+                    ),
                     SizedBox(width: 3.w),
-                    Text('${course.durationMinutes ?? 0}m', style: AppTextStyles.small().copyWith(fontSize: 9.sp)),
+                    Text(
+                      '${course.durationMinutes ?? 0}m',
+                      style: AppTextStyles.small().copyWith(fontSize: 9.sp),
+                    ),
                     const Spacer(),
-                    Icon(Icons.play_circle_outline, size: 11.sp, color: AppTextStyles.small().color),
+                    Icon(
+                      Icons.play_circle_outline,
+                      size: 11.sp,
+                      color: AppTextStyles.small().color,
+                    ),
                     SizedBox(width: 3.w),
-                    Text('${course.videoCount ?? 0}', style: AppTextStyles.small().copyWith(fontSize: 9.sp)),
+                    Text(
+                      '${course.videoCount ?? 0}',
+                      style: AppTextStyles.small().copyWith(fontSize: 9.sp),
+                    ),
                   ],
                 ),
                 SizedBox(height: 6.h),
@@ -223,7 +283,10 @@ class HomeView extends StatelessWidget {
                 // Price
                 if (course.mrp != null)
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 6.w,
+                      vertical: 3.h,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.sucessPrimary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(6.r),
@@ -252,13 +315,22 @@ class HomeView extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [colorScheme.primary.withOpacity(0.3), colorScheme.secondary.withOpacity(0.3)],
+          colors: [
+            colorScheme.primary.withOpacity(0.3),
+            colorScheme.secondary.withOpacity(0.3),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
-      child: Center(child: Icon(Icons.play_circle_outline, size: 40.sp, color: AppColors.white.withOpacity(0.8))),
+      child: Center(
+        child: Icon(
+          Icons.play_circle_outline,
+          size: 40.sp,
+          color: AppColors.white.withOpacity(0.8),
+        ),
+      ),
     );
   }
 
@@ -276,11 +348,22 @@ class HomeView extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Icon(Icons.school_outlined, size: 80.sp, color: AppTextStyles.caption().color),
+          Icon(
+            Icons.school_outlined,
+            size: 80.sp,
+            color: AppTextStyles.caption().color,
+          ),
           SizedBox(height: 16.h),
-          Text('no_courses_available'.tr, style: AppTextStyles.headlineMedium()),
+          Text(
+            'no_courses_available'.tr,
+            style: AppTextStyles.headlineMedium(),
+          ),
           SizedBox(height: 8.h),
-          Text('check_back_later'.tr, style: AppTextStyles.caption(), textAlign: TextAlign.center),
+          Text(
+            'check_back_later'.tr,
+            style: AppTextStyles.caption(),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

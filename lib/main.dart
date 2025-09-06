@@ -14,6 +14,7 @@ void main() async {
   await GetStorage.init();
   await AppTranslations.init();
   Get.put(ThemeController()); // Initialize controller
+
   final savedLocale = getSavedLocale();
   runApp(MyApp(savedLocale: savedLocale));
 }
@@ -34,7 +35,8 @@ class MyApp extends StatelessWidget {
         return Obx(() {
           final isDark = themeController.isDarkMode.value;
           return AnnotatedRegion<SystemUiOverlayStyle>(
-            value: isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+            value:
+                isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
             child: GetMaterialApp(
               debugShowCheckedModeBanner: false,
               title: "Mega One Patient",
@@ -48,7 +50,9 @@ class MyApp extends StatelessWidget {
               themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
               builder: (context, child) {
                 return MediaQuery(
-                  data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(0.8)),
+                  data: MediaQuery.of(
+                    context,
+                  ).copyWith(textScaler: TextScaler.linear(0.8)),
                   child: child ?? const SizedBox.shrink(),
                 );
               },
@@ -63,7 +67,8 @@ class MyApp extends StatelessWidget {
   Locale _getDeviceOrFallbackLocale() {
     final deviceLocale = Get.deviceLocale;
     const supportedLocales = ['en_US', 'hi_IN'];
-    final current = '${deviceLocale?.languageCode}_${deviceLocale?.countryCode}';
+    final current =
+        '${deviceLocale?.languageCode}_${deviceLocale?.countryCode}';
     if (deviceLocale != null && supportedLocales.contains(current)) {
       return deviceLocale;
     }
