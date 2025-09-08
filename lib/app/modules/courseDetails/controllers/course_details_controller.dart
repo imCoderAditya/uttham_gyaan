@@ -57,35 +57,39 @@ class CourseDetailsController extends GetxController {
     String? description,
     double? amount,
     int? paymentID,
-  }) {
+  }) async {
     // Create the service instance
     razorpayService = RazorPayService(
-      onPaymentSuccess: (PaymentSuccessResponse response) {
+      onPaymentSuccess: (PaymentSuccessResponse response) async {
         log("✅ Payment Success: $response");
-        paymentStatusUpdate(
+        await paymentStatusUpdate(
           paymentID: paymentID,
           transactionID: response.paymentId,
         );
+        GlobalLoader.hide();
         // handle success (maybe call your backend to verify)
       },
-      onPaymentError: (PaymentFailureResponse response) {
+      onPaymentError: (PaymentFailureResponse response) async {
         log("❌ Payment Failed: ${response.code} - ${response.message}");
-        paymentStatusUpdate(paymentID: paymentID, transactionID: "");
+        await paymentStatusUpdate(paymentID: paymentID, transactionID: "");
+        GlobalLoader.hide();
         // show error to user
       },
       onExternalWallet: (ExternalWalletResponse response) {
         log("💳 External Wallet Selected: ${response.walletName}");
+        GlobalLoader.hide();
       },
     );
     try {
       razorpayService?.openCheckout(
-        amountInRupees: 1 ,
+        amountInRupees: amount ?? 0.0,
         name: name ?? "",
         description: "Payment",
         contact: profileController.profileModel.value?.data?.phone,
         email: profileController.profileModel.value?.data?.email,
       );
     } catch (e) {
+      GlobalLoader.hide();
       debugPrint("❌ Error in startPayment: $e");
     }
   }
