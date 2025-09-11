@@ -71,7 +71,8 @@ class ShimmerHomeView extends StatelessWidget {
           ),
         ),
       ),
-      title: Text('Uttham Gyaan'.tr, style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white)),
+      centerTitle: false,
+      title: Text('uttham_gyan'.tr, style: AppTextStyles.headlineMedium().copyWith(color: AppColors.white)),
       actions: [
         Container(
           margin: EdgeInsets.only(right: 16.w, bottom: 5.h),

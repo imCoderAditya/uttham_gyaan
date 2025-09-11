@@ -374,7 +374,7 @@ class WithdrawalView extends GetView<WithdrawalController> {
     IconData iconData;
 
     switch (transaction.status?.toLowerCase()) {
-      case 'completed':
+      case 'success':
         iconColor = AppColors.sucessPrimary;
         iconData = Icons.check_circle;
         break;
@@ -382,7 +382,7 @@ class WithdrawalView extends GetView<WithdrawalController> {
         iconColor = AppColors.secondaryPrimary;
         iconData = Icons.schedule;
         break;
-      case 'failed':
+      case 'rejected':
         iconColor = AppColors.red;
         iconData = Icons.error;
         break;
@@ -404,13 +404,13 @@ class WithdrawalView extends GetView<WithdrawalController> {
   Widget _buildStatusChip(String? status) {
     Color backgroundColor;
     Color textColor;
-    String statusKey = status?.toLowerCase() ?? 'unknown';
+    String statusKey = status?.toLowerCase() ?? '';
 
     // Map status to translation key
-    String displayStatus = statusKey.tr;
+    String displayStatus = statusKey;
 
     switch (statusKey) {
-      case 'completed':
+      case 'success':
         backgroundColor = AppColors.sucessPrimary.withOpacity(0.1);
         textColor = AppColors.sucessPrimary;
         break;
@@ -418,7 +418,7 @@ class WithdrawalView extends GetView<WithdrawalController> {
         backgroundColor = AppColors.secondaryPrimary.withOpacity(0.1);
         textColor = AppColors.secondaryPrimary;
         break;
-      case 'failed':
+      case 'rejected':
         backgroundColor = AppColors.red.withOpacity(0.1);
         textColor = AppColors.red;
         break;
