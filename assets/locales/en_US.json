@@ -2,7 +2,7 @@
   "hello": "Hello",
   "welcome": "Welcome to Uttamk Gyan Kamao",
   "uttham_gyan": "Uttamk Gyan Kamao",
-  "utthamgyaan": "Utthamk Gyan Kamao",
+  "utthamgyaan": "Uttamk Gyan Kamao",
   "excellence_in_education": "Excellence in Education",
   "loading_text": "Loading...",
   "initializing": "Initializing...",
@@ -294,5 +294,16 @@
   "not_available": "N/A",
   "minutes_short": "min",
   "hours_short": "h",
-  "minutes_short_with_h": "m"
+  "minutes_short_with_h": "m",
+  "forgget_password": "Forget Password",
+  "forget_password": "Forget Password?",
+  "reset_password_subtitle": "Don't worry, we'll help you reset it",
+  "reset_password": "Reset Password",
+ "reset_instruction": "Enter your mobile number and email and we'll send you instructions to reset your password",
+  "reset_info": "We'll send a verification code to your registered mobile number",
+  "send_reset_code": "Send Reset Code",
+  "remember_password": "Remember your password?",
+  "back_to_login": "Back to Login",
+  "reset_password_error": "Failed to reset password. Please try again later.",
+  "totalWithdrawalRequest": "Total Withdrawal Request"
 }

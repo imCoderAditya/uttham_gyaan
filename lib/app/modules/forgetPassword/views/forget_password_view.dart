@@ -3,47 +3,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:uttham_gyaan/app/core/config/theme/app_colors.dart';
 import 'package:uttham_gyaan/app/core/config/theme/app_text_styles.dart';
-import 'package:uttham_gyaan/app/modules/forgetPassword/views/forget_password_view.dart';
-import 'package:uttham_gyaan/app/modules/login/controllers/login_controller.dart';
 import 'package:uttham_gyaan/components/Snack_bar_view.dart';
+import '../controllers/forget_password_controller.dart';
 
-class LoginView extends GetView<LoginController> {
-  const LoginView({super.key});
+class ForgetPasswordView extends GetView<ForgetPasswordController> {
+  const ForgetPasswordView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildHeaderSection(context),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: Form(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 40.h),
-                    _buildWelcomeSection(context),
-                    SizedBox(height: 32.h),
-                    _buildInputSection(context),
-                    SizedBox(height: 32.h),
-                    _buildLoginButton(context),
-                    SizedBox(height: 24.h),
-                    _buildRegisterLink(context),
-                    SizedBox(height: 32.h),
-                  ],
+    return GetBuilder<ForgetPasswordController>(
+      init: ForgetPasswordController(),
+      builder: (controller) {
+        return Scaffold(
+          backgroundColor: theme.scaffoldBackgroundColor,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                _buildHeaderSection(context),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 40.h),
+                      _buildContentSection(context),
+                      SizedBox(height: 32.h),
+                      _buildInputSection(context),
+                      SizedBox(height: 32.h),
+                      _buildResetButton(context),
+                      SizedBox(height: 24.h),
+                      _buildBackToLoginLink(context),
+                      SizedBox(height: 32.h),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -54,7 +55,7 @@ class LoginView extends GetView<LoginController> {
 
     return Container(
       width: double.infinity,
-      height: 200.h,
+      height: 220.h,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors:
@@ -81,6 +82,7 @@ class LoginView extends GetView<LoginController> {
       ),
       child: Stack(
         children: [
+          // Decorative circles
           Positioned(
             top: -50.h,
             right: -50.w,
@@ -94,7 +96,7 @@ class LoginView extends GetView<LoginController> {
             ),
           ),
           Positioned(
-            top: 50.h,
+            top: 60.h,
             left: -30.w,
             child: Container(
               width: 80.w,
@@ -105,13 +107,35 @@ class LoginView extends GetView<LoginController> {
               ),
             ),
           ),
+          // Back button
+          Positioned(
+            top: 50.h,
+            left: 16.w,
+            child: Container(
+              width: 40.w,
+              height: 40.h,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.2),
+              ),
+              child: IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Colors.white,
+                  size: 20.sp,
+                ),
+                onPressed: () => Get.back(),
+              ),
+            ),
+          ),
+          // Main content
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: 60.w,
-                  height: 60.h,
+                  width: 70.w,
+                  height: 70.h,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.white.withOpacity(0.2),
@@ -121,14 +145,14 @@ class LoginView extends GetView<LoginController> {
                     ),
                   ),
                   child: Icon(
-                    Icons.school_outlined,
-                    size: 30.sp,
+                    Icons.lock_reset_outlined,
+                    size: 35.sp,
                     color: Colors.white,
                   ),
                 ),
                 SizedBox(height: 16.h),
                 Text(
-                  'utthamgyaan'.tr, // 'Uttham Gyaan'
+                  'forgget_password'.tr,
                   style: AppTextStyles.headlineLarge().copyWith(
                     color: Colors.white,
                     fontSize: 24.sp,
@@ -137,7 +161,7 @@ class LoginView extends GetView<LoginController> {
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  'welcome_back'.tr, // 'Welcome Back'
+                  'reset_password_subtitle'.tr,
                   style: AppTextStyles.body().copyWith(
                     color: Colors.white.withOpacity(0.9),
                     fontSize: 14.sp,
@@ -151,7 +175,7 @@ class LoginView extends GetView<LoginController> {
     );
   }
 
-  Widget _buildWelcomeSection(BuildContext context) {
+  Widget _buildContentSection(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -159,7 +183,7 @@ class LoginView extends GetView<LoginController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'sign_in'.tr, // 'Sign In'
+          'reset_password'.tr,
           style: AppTextStyles.headlineLarge().copyWith(
             fontSize: 28.sp,
             fontWeight: FontWeight.bold,
@@ -168,10 +192,11 @@ class LoginView extends GetView<LoginController> {
         ),
         SizedBox(height: 8.h),
         Text(
-          'sign_in_to_continue'.tr, // 'Please sign in to continue learning'
+          'reset_instruction'.tr,
           style: AppTextStyles.body().copyWith(
             fontSize: 16.sp,
             color: colorScheme.onSurfaceVariant,
+            height: 1.4,
           ),
         ),
       ],
@@ -182,55 +207,21 @@ class LoginView extends GetView<LoginController> {
     return Column(
       children: [
         _buildTextField(
-          controller: controller.identifierController,
-          label: 'identifier'.tr,
+          controller: controller.mobileController,
+          label: 'mobile_number'.tr,
+          hintText: 'enter_mobile_number'.tr,
+          prefixIcon: Icons.phone_outlined,
+          keyboardType: TextInputType.phone,
           maxLength: 10,
-          counter: SizedBox(),
-          hintText: 'enter_identifier'.tr,
-          prefixIcon: Icons.person_outline,
-          keyboardType: TextInputType.number,
-          validator: (value) => value!.isEmpty ? 'enter_identifier'.tr : null,
         ),
-        SizedBox(height: 20.h),
-        Obx(
-          () => _buildTextField(
-            controller: controller.passwordController,
-            label: 'password'.tr,
-            hintText: 'enter_password'.tr,
-            prefixIcon: Icons.lock_outline,
-            obscureText: !controller.isPasswordVisible.value,
-            suffixIcon: IconButton(
-              icon: Icon(
-                controller.isPasswordVisible.value
-                    ? Icons.visibility_off_outlined
-                    : Icons.visibility_outlined,
-              ),
-              onPressed: controller.togglePasswordVisibility,
-            ),
-            validator: (value) {
-              if (value!.isEmpty) return 'enter_password'.tr;
-              if (value.length < 6) return 'password_min_length'.tr;
-              return null;
-            },
-          ),
-        ),
-        SizedBox(height: 20.h),
-        GestureDetector(
-          onTap: () {
-            Get.to(ForgetPasswordView());
-          },
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              "forgget_password".tr,
-              style: AppTextStyles.button.copyWith(
-                color: AppColors.primaryColor,
-                decoration: TextDecoration.underline,
-                decorationColor: AppColors.primaryColor,
-                fontSize: 14.sp,
-              ),
-            ),
-          ),
+        SizedBox(height: 16.h),
+
+        _buildTextField(
+          controller: controller.emailController,
+          label: 'email'.tr,
+          hintText: 'enter_your_email'.tr,
+          prefixIcon: Icons.email_outlined,
+          keyboardType: TextInputType.emailAddress,
         ),
       ],
     );
@@ -241,13 +232,8 @@ class LoginView extends GetView<LoginController> {
     required String label,
     required String hintText,
     required IconData prefixIcon,
-    bool obscureText = false,
-    Widget? suffixIcon,
-    Widget? counter,
-    int? maxLength,
-
     TextInputType? keyboardType,
-    String? Function(String?)? validator,
+    int? maxLength,
   }) {
     final theme = Get.theme;
     final colorScheme = theme.colorScheme;
@@ -274,16 +260,14 @@ class LoginView extends GetView<LoginController> {
       ),
       child: TextFormField(
         controller: controller,
-        obscureText: obscureText,
-        maxLength: maxLength,
-
         keyboardType: keyboardType,
+        maxLength: maxLength,
         style: AppTextStyles.body().copyWith(
           fontSize: 16.sp,
           color: colorScheme.onSurface,
         ),
         decoration: InputDecoration(
-          counter: counter,
+          counter: const SizedBox(),
           labelText: label,
           hintText: hintText,
           prefixIcon: Icon(
@@ -291,7 +275,6 @@ class LoginView extends GetView<LoginController> {
             color: colorScheme.onSurfaceVariant,
             size: 22.sp,
           ),
-          suffixIcon: suffixIcon,
           labelStyle: AppTextStyles.body().copyWith(
             fontSize: 14.sp,
             color: colorScheme.onSurfaceVariant,
@@ -323,12 +306,11 @@ class LoginView extends GetView<LoginController> {
           filled: true,
           fillColor: Colors.transparent,
         ),
-        validator: validator,
       ),
     );
   }
 
-  Widget _buildLoginButton(BuildContext context) {
+  Widget _buildResetButton(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Obx(
@@ -361,25 +343,35 @@ class LoginView extends GetView<LoginController> {
                   ],
         ),
         child: ElevatedButton(
-          onPressed: () {
-            if (controller.identifierController.text.isEmpty) {
-              SnackBarView.showError(message: "enter_mobile_number".tr);
-              return;
-            }
+          onPressed:
+              controller.isLoading.value
+                  ? null
+                  : () {
+                    if (controller.mobileController.text.isEmpty) {
+                      SnackBarView.showError(message: "enter_mobile_number".tr);
+                      return;
+                    }
 
-            if (controller.identifierController.text.length != 10 ||
-                !RegExp(
-                  r'^[0-9]+$',
-                ).hasMatch(controller.identifierController.text)) {
-              SnackBarView.showError(message: "invalid_mobile_number".tr);
-              return;
-            }
-            if (controller.passwordController.text.isEmpty) {
-              SnackBarView.showError(message: "enter_password".tr);
-              return;
-            }
-            controller.login();
-          },
+                    if (controller.mobileController.text.length != 10 ||
+                        !RegExp(
+                          r'^[0-9]+$',
+                        ).hasMatch(controller.mobileController.text)) {
+                      SnackBarView.showError(
+                        message: "invalid_mobile_number".tr,
+                      );
+                      return;
+                    }
+                    if (controller.emailController.text.isEmpty) {
+                      SnackBarView.showError(message: "enter_your_email".tr);
+                      return;
+                    }
+                    if (!GetUtils.isEmail(controller.emailController.text)) {
+                      SnackBarView.showError(message: "enter_a_valid_email".tr);
+                      return;
+                    }
+
+                    controller.resetPassword();
+                  },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
@@ -400,21 +392,32 @@ class LoginView extends GetView<LoginController> {
                       ),
                     ),
                   )
-                  : Text(
-                    'sign_in'.tr,
-                    style: AppTextStyles.body().copyWith(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      letterSpacing: 0.5,
-                    ),
+                  : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.send_outlined,
+                        color: Colors.white,
+                        size: 20.sp,
+                      ),
+                      SizedBox(width: 8.w),
+                      Text(
+                        'send_reset_code'.tr,
+                        style: AppTextStyles.body().copyWith(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
                   ),
         ),
       ),
     );
   }
 
-  Widget _buildRegisterLink(BuildContext context) {
+  Widget _buildBackToLoginLink(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Center(
@@ -422,16 +425,17 @@ class LoginView extends GetView<LoginController> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'no_account'.tr, // "Don't have an account?"
+            'remember_password'.tr,
             style: AppTextStyles.body().copyWith(
               fontSize: 14.sp,
               color: colorScheme.onSurfaceVariant,
             ),
           ),
+          SizedBox(width: 4.w),
           GestureDetector(
-            onTap: () => Get.toNamed('/register'),
+            onTap: () => Get.back(),
             child: Text(
-              'sign_up'.tr, // 'Sign Up'
+              'back_to_login'.tr,
               style: AppTextStyles.body().copyWith(
                 fontSize: 14.sp,
                 color: colorScheme.primary,

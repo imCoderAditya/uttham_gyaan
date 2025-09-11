@@ -26,4 +26,5 @@ class EndPoint {
   static const paymentsTransactions = "$baseurl/payments/transactions";
   static const paymentsRequest = "$baseurl/payments/withdraw";
   static const certificateAPI = "$baseurl/courseprogress/summary";
+  static const forgetrequest = "$baseurl/CourseProgress/forgetrequest";
 }

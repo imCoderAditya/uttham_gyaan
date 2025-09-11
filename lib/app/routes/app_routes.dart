@@ -19,6 +19,7 @@ abstract class Routes {
   static const WITHDRAWAL = _Paths.WITHDRAWAL;
   static const CERTIFICATE = _Paths.CERTIFICATE;
   static const WEBVIEW = _Paths.WEBVIEW;
+  static const FORGET_PASSWORD = _Paths.FORGET_PASSWORD;
 }
 
 abstract class _Paths {
@@ -39,4 +40,5 @@ abstract class _Paths {
   static const WITHDRAWAL = '/withdrawal';
   static const CERTIFICATE = '/certificate';
   static const WEBVIEW = '/webview';
+  static const FORGET_PASSWORD = '/forget-password';
 }

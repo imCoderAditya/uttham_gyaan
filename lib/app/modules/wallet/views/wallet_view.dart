@@ -201,7 +201,7 @@ class WalletView extends GetView<WalletController> {
           ),
           SizedBox(height: 12.h),
           Text(
-            '₹${(data?.totalCommissionEarned ?? 0.0).toStringAsFixed(2)}',
+            '₹${(data?.availableBalance ?? 0.0).toStringAsFixed(2)}',
             style: AppTextStyles.headlineMedium().copyWith(
               color: Colors.white,
               fontSize: 32.sp,
@@ -270,7 +270,7 @@ class WalletView extends GetView<WalletController> {
             _buildEnhancedMetricCard(
               context,
               'pending_commission'.tr,
-              '₹${data?.totalCommissionEarned?.toStringAsFixed(2)}',
+              '₹${data?.pendingCommission?.toStringAsFixed(2)}',
               Icons.hourglass_empty,
               AppColors.sucessPrimary,
             ),

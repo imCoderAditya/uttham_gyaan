@@ -6,6 +6,8 @@ import '../modules/certificate/bindings/certificate_binding.dart';
 import '../modules/certificate/views/certificate_view.dart';
 import '../modules/courseDetails/bindings/course_details_binding.dart';
 import '../modules/courseDetails/views/course_details_view.dart';
+import '../modules/forgetPassword/bindings/forget_password_binding.dart';
+import '../modules/forgetPassword/views/forget_password_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/language/bindings/language_binding.dart';
@@ -108,6 +110,11 @@ class AppPages {
       name: _Paths.WEBVIEW,
       page: () => const WebviewView(),
       binding: WebviewBinding(),
+    ),
+    GetPage(
+      name: _Paths.FORGET_PASSWORD,
+      page: () => const ForgetPasswordView(),
+      binding: ForgetPasswordBinding(),
     ),
   ];
 }

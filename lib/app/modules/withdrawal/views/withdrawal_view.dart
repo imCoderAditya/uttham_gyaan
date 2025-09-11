@@ -26,12 +26,13 @@ class WithdrawalView extends GetView<WithdrawalController> {
 
             final withdrawalData =
                 controller.withdrawalTransactionModel.value?.data;
-
+            final summary =
+                controller.withdrawalTransactionModel.value?.summary;
             if (withdrawalData == null || withdrawalData.isEmpty) {
               return _buildEmptyState();
             }
 
-            return _buildTransactionsList(withdrawalData);
+            return _buildTransactionsList(withdrawalData, summary);
           }),
         );
       },
@@ -134,13 +135,16 @@ class WithdrawalView extends GetView<WithdrawalController> {
     );
   }
 
-  Widget _buildTransactionsList(List<WithdrawalTransaction> transactions) {
+  Widget _buildTransactionsList(
+    List<WithdrawalTransaction> transactions,
+    Summary? summary,
+  ) {
     return RefreshIndicator(
       onRefresh: () async => controller.fetchWithdrawal(),
       color: AppColors.primaryColor,
       child: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(child: _buildSummaryCard(transactions)),
+          SliverToBoxAdapter(child: _buildSummaryCard(transactions, summary)),
           SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             sliver: SliverList(
@@ -156,18 +160,10 @@ class WithdrawalView extends GetView<WithdrawalController> {
     );
   }
 
-  Widget _buildSummaryCard(List<WithdrawalTransaction> transactions) {
-    double totalAmount = transactions.fold(
-      0.0,
-      (sum, item) => sum + (item.amount ?? 0),
-    );
-    int completedCount =
-        transactions
-            .where((t) => t.status?.toLowerCase() == 'completed')
-            .length;
-    int pendingCount =
-        transactions.where((t) => t.status?.toLowerCase() == 'pending').length;
-
+  Widget _buildSummaryCard(
+    List<WithdrawalTransaction> transactions,
+    Summary? summary,
+  ) {
     return Container(
       margin: EdgeInsets.all(16.w),
       padding: EdgeInsets.all(20.w),
@@ -201,7 +197,7 @@ class WithdrawalView extends GetView<WithdrawalController> {
           ),
           SizedBox(height: 8.h),
           Text(
-            '\u{20B9}${totalAmount.toStringAsFixed(2)}',
+            '\u{20B9}${summary?.totalWithdrawalAmount?.toStringAsFixed(2)}',
             style: AppTextStyles.headlineLarge().copyWith(
               color: Colors.white,
               fontSize: 28.sp,
@@ -213,7 +209,7 @@ class WithdrawalView extends GetView<WithdrawalController> {
               Expanded(
                 child: _buildStatItem(
                   'completed'.tr,
-                  '$completedCount',
+                  '${summary?.totalDebitSuccessCount ?? ""}',
                   Icons.check_circle,
                   AppColors.sucessPrimary,
                 ),
@@ -222,7 +218,7 @@ class WithdrawalView extends GetView<WithdrawalController> {
               Expanded(
                 child: _buildStatItem(
                   'pending'.tr,
-                  '$pendingCount',
+                  '${summary?.totalDebitPendingCount ?? ""}',
                   Icons.schedule,
                   AppColors.secondaryPrimary,
                 ),
@@ -231,12 +227,36 @@ class WithdrawalView extends GetView<WithdrawalController> {
               Expanded(
                 child: _buildStatItem(
                   'total'.tr,
-                  '${transactions.length}',
+                  '${summary?.totalDebitCount ?? ""}',
                   Icons.receipt,
                   Colors.white70,
                 ),
               ),
             ],
+          ),
+          SizedBox(height: 16.h),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'totalWithdrawalRequest'.tr,
+                  style: AppTextStyles.subtitle().copyWith(
+                    color: Colors.white,
+                    fontSize: 12.sp
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  '\u{20B9}${summary?.totalWithdrawlAmountInPendingRequest?.toStringAsFixed(2)}',
+                  style: AppTextStyles.headlineLarge().copyWith(
+                    color: Colors.white,
+                    fontSize: 20.sp,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -667,7 +687,7 @@ class WithdrawalView extends GetView<WithdrawalController> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                     controller.validateAndSubmit();
+                        controller.validateAndSubmit();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryColor,
